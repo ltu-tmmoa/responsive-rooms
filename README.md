@@ -1,5 +1,4 @@
-responsive-rooms
-================
+# Responsive Rooms
 
 LTU Project: Responsive Rooms (Pervasive Computing)
 
