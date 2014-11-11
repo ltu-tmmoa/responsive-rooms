@@ -86,8 +86,8 @@ change and query its state.
 \** Actuators report at sensible intervals to its master, but at least once
 every 29 seconds. An actuator failing to report for 30 seconds will be
 considered `unresponsive` for another 30 seconds, after which it is forcibly
-deregistered from the master. An `unresponsive` actuator succeeding to send a
-report to its master before being deregistered regains normal status.
+de-registered from the master. An `unresponsive` actuator succeeding to send a
+report to its master before being de-registered regains normal status.
 
 ### De-registration
 
