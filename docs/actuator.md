@@ -4,7 +4,10 @@ An actuator is a process capable of performing real-world interaction. This
 document outlines the states, communications and messages an actuator is
 expected to conform to in order to be part of a responsive rooms system.
 
-## Actuator State Diagram
+## Actuator States
+
+The actuator conceptually conforms to the below state diagram. Conformance is
+not a strict requirement.
 
 ![Alt Diagram](pics/actuator_state_diagram.png)
 
@@ -49,7 +52,7 @@ change and query its state.
 +------------+    +------------+
       |                 |
     +-+-+             +-+-+
-    |   |<-----M------|   | [M] Master Node Discovery (Broadcast UDP)
+    |   |<-----M------|   | [M] Master Process Discovery (Broadcast UDP)
     |   |             |   |
     |   |-----SYN---->|   |
     |   |<--SYN/ACK---|   | TCP Handshake.
@@ -64,7 +67,7 @@ change and query its state.
 | Msg.| Prt.| Port  | Description                                              |
 |:---:|:---:|:-----:|:---------------------------------------------------------|
 |  M  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
-| AMR | TCP | 14001 | Actuator type, allowed actions with typed parameters*.   |
+| AMR | TCP | 14001 | Actuator type, allowed actions with parameter names*.    |
 
 \* If a sensor has any facility, room or location data, it will send it to
    master in order to help the master in determining its locality.
@@ -89,7 +92,7 @@ change and query its state.
 
 | Msg.| Prt.| Port  | Description                                              |
 |:---:|:---:|:-----:|:---------------------------------------------------------|
-| SCU | TCP | 14001 | Facility and room identifiers, optionally locality data*.|
+| ACU | TCP | 14001 | Facility and room identifiers, optionally locality data*.|
 |  A  | TCP | 14001 | Target action and action state.                          |
 |  AR | TCP | 14001 | Current action states**.                                 |
 
@@ -121,4 +124,93 @@ De-registration occurs by either party terminating the TCP session.
 
 ## Actuator/Master Message Protocol
 
-TODO
+```
+[M] Master Process Discovery
+Protocol: UDP Broadcast
+Port: 14000
+
+Schema:
+  message: string          # Message type identifier. Is always "M".
+
+Example:
+  { "message": "M" }
+```
+
+```
+[AMR] Actuator Master Registration
+Protocol: TCP Unicast
+Port: 14001
+
+Schema:
+  message: string          # Message type identifier. Is always "AMR".
+  type: string             # Type of actuator, eg. "door", "alarm", etc.
+  actions: [               # List of available actions.
+    name: string           # Name of action, eg. "open", "trigger", etc.
+    parameters: [          # List of action parameters.
+      :string              # Parameter name, eg. "intensity", "speed", etc.
+    ]
+  ]
+  locality: object         # Contents of any ACU message previously received.
+
+Example:
+  {
+    "message": "AMR",
+    "type": "door",
+    "actions": [
+      {
+        "name": "open",
+        "parameters": [ "speed" ]
+      },
+      {
+        "name": "close",
+        "parameters": [ "speed" ]
+      }
+    ]
+  }
+```
+
+```
+[ACU] Actuator Master Registration
+Protocol: TCP Unicast
+Port: 14001
+
+Schema:
+  message: string          # Message type identifier. Is always "ACU".
+  facility: string         # Facility identifier.
+  room: string             # Room identifier.
+  position:                # Optional. Position data.
+    x: number
+    y: number
+    z: number
+
+Example:
+  {
+    "message": "ACU",
+    "facility": "A",
+    "room": "A1202"
+  }
+```
+
+```
+[A] Action Statement
+Protocol: TCP Unicast
+Port: 14001
+
+Schema:
+  TODO
+
+Example:
+  TODO
+```
+
+```
+[AR] Actuator Report
+Protocol: TCP Unicast
+Port: 14001
+
+Schema:
+  TODO
+
+Example:
+  TODO
+```
