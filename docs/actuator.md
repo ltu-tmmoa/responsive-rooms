@@ -6,9 +6,35 @@ expected to conform to in order to be part of a responsive rooms system.
 
 ## Actuator State Diagram
 
-```
-TODO
-```
+![Alt Diagram](pics/actuator_state_diagram.svg)
+
+### Registration States (Yellow)
+
+| State    | Description                                                       |
+|:---------|:------------------------------------------------------------------|
+| Bind     | Binds UDP port to use when listening for master broadcasts.       |
+| Listen   | Listens for master discovery broadcasts (message M).              |
+| Unbind   | Removes UDP port binding.                                         |
+| Wait     | Waits for some suitable time.                                     |
+| Connect  | Connects to discovered master using TCP.                          |
+| Register | Sends registration message to master (message AMR).               |
+
+### Runtime States (Blue)
+
+| State    | Description                                                       |
+|:---------|:------------------------------------------------------------------|
+| Schedule | Determines when to receive message and report state.              |
+| Receive  | Attempts to receive (non-blocking) message from master.           |
+| Action   | Carries out received action (in message A).                       |
+| Update   | Updates local context data (using message ACU).                   |
+| Report   | Sends curent state to master (message AR).                        |
+
+### Error States (Red)
+
+| State    | Description                                                       |
+|:---------|:------------------------------------------------------------------|
+| Unbind   | Removes UDP port binding.                                         |
+| Wait     | Waits for some suitable time.                                     |
 
 ## Actuator/Master Communication
 
@@ -51,7 +77,7 @@ change and query its state.
 +------------+    +------------+
       |                 |
     +-+-+             +-+-+
-    |   |<----SCU-----|   | Sensor Context Update
+    |   |<----ACU-----|   | Actuator Context Update
     |   |             |   |
     |   |<-----A------|   | Action Statement
     |   |             |   |
