@@ -6,7 +6,7 @@ expected to conform to in order to be part of a responsive rooms system.
 
 ## Actuator State Diagram
 
-![Alt Diagram](pics/actuator_state_diagram.svg)
+![Alt Diagram](pics/actuator_state_diagram.png)
 
 ### Registration States (Yellow)
 
