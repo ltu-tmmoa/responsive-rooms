@@ -71,9 +71,9 @@ change and query its state.
 +------------+    +------------+
       |                 |
     +-+-+             +-+-+
-    |   |<----ACU-----|   | Actuator Context Update*
+    |   |<-----CU-----|   | Context Update*
     |   |             |   |
-    |   |<-----A------|   | Action Statement
+    |   |<-----SU-----|   | State Update
     |   |             |   |
     |   |------AR---->|   | Actuator Report**
     +-+-+             +-+-+
@@ -114,21 +114,22 @@ The below list contains all messages relevant to the actuator.
 | Msg.| Prt.| Port  | Description                                              |
 |:---:|:---:|:-----:|:---------------------------------------------------------|
 |  M  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
-| AMR | TCP | 14001 | Actuator type, allowed actions with parameter names*.    |
-| ACU | TCP | 14001 | Facility and room identifiers, optionally locality data*.|
-|  A  | TCP | 14001 | Target action and action state.                          |
-|  AR | TCP | 14001 | Current action states**.                                 |
+| AMR | TCP | 14001 | Actuator type, allowed actions with parameter names.     |
+|  CU | TCP | 14001 | Facility and room identifiers.                           |
+|  SU | TCP | 14001 | Target property and state.                               |
+|  AR | TCP | 14001 | Current actuator state.                                  |
 
 ### Message Schemata
 
-All messages strictly conform to the JSON specification. The root structure is
-always an object.
+All messages strictly conform to the [JSON](http://www.json.org) specification.
+The root structure is always an object.
 
 #### [M] Master Process Discovery
 ```
 Schema:
-  message: string          # Message type identifier. Is always "M".
-
+  { "message": "M" }         # Message type identifier. Is always "M".
+```
+```
 Example:
   { "message": "M" }
 ```
@@ -136,77 +137,103 @@ Example:
 #### [AMR] Actuator Master Registration
 ```
 Schema:
-  message: string          # Message type identifier. Is always "AMR".
-  type: string             # Type of actuator, eg. "door", "alarm", etc.
-  actions: [               # List of available actuator actions.
-    name: string           # Name of action, eg. "open", "trigger", etc.
-    parameters: [          # List of action parameters.
-      name: string         # Name of parameter.
-      type: string         # Type. One of "boolean", "string", or "integer".
-    ]
-  ]
-  locality: object         # Contents of any ACU message previously received.
+  {
+    "message": "AMR",        # Message type identifier. Is always "AMR".
+    "type": "<type>",        # Type of actuator, eg. "door", "alarm", etc.
+    "properties": {
+      "<name>": "<type>",    # Name and property type*.
+      ...                    # May contain any amount of properties.
+    },
+    "context": {<context>}   # Data of CU message previously received, or null.
+  }
+```
 
+\* A property type may be one of "boolean", "integer", "number", "string",
+   "array" or "object".
+
+```
 Example:
   {
     "message": "AMR",
     "type": "door",
-    "actions": [
-      {
-        "name": "open",
-        "parameters": [
-          {
-            "name": "speed",
-            "type": "integer"
-          }
-        ]
-      },
-      {
-        "name": "close",
-        "parameters": [
-          {
-            "name": "speed",
-            "type": "integer"
-          }
-        ]
-      }
-    ]
+    "properties": {
+      "open": "boolean"
+    },
+    "context": null
   }
 ```
 
-#### [ACU] Actuator Master Registration
+#### [CU] Context Update
 ```
 Schema:
-  message: string          # Message type identifier. Is always "ACU".
-  facility: string         # Facility identifier.
-  room: string             # Room identifier.
-  position:                # Optional. Position data.
-    x: number
-    y: number
-    z: number
+  {
+    "message": "CU",         # Message type identifier. Is always "CU".
+    "facility": "<name>",    # Facility identifier.
+    "room": "<name>"         # Room identifier.
+    "location": {            # Optional. Absolute coordinates.
+      "x": <x>,
+      "y": <y>,
+      "z": <z>
+    }
+  }
+```
 
+```
 Example:
   {
-    "message": "ACU",
+    "message": "CU",
     "facility": "A",
-    "room": "A1202"
+    "room": "1202",
+    "location": {
+      "x": 4.5,
+      "y": 1.9,
+      "z": 6.2
+    }
   }
 ```
 
-#### [A] Action Statement
+#### [SU] State Update
 ```
 Schema:
-  TODO
+  {
+    "message": "SU",         # Message type identifier. Is always "SU".
+    "properties": {
+      "<name>": <value>,     # Name and property value of relevant type.
+      ...                    # May contain any amount of relevant properties*.
+    }
+  }
+```
 
+\* Existing properties not included do not have their state changed.
+
+```
 Example:
-  TODO
+  {
+    "message": "SU",
+    "properties": {
+      "open": false
+    }
+  }
 ```
 
 #### [AR] Actuator Report
 ```
 Schema:
-  TODO
+  {
+    "message": "AR",         # Message type identifier. Is always "AR".
+    "properties": {
+      "<name>": <value>,     # Name and property value of relevant type.
+      ...                    # May contain any amount of relevant properties.
+    }
+  }
+```
 
+```
 Example:
-  TODO
+{
+  "message": "SU",
+  "properties": {
+    "open": true
+  }
+}
 ```
