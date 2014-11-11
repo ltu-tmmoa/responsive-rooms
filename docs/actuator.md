@@ -231,7 +231,7 @@ Schema:
 ```
 Example:
 {
-  "message": "SU",
+  "message": "AR",
   "properties": {
     "open": true
   }
