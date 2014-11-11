@@ -6,9 +6,6 @@ expected to conform to in order to be part of a responsive rooms system.
 
 ## Actuator States
 
-The actuator conceptually conforms to the below state diagram. Conformance is
-not a strict requirement.
-
 ![Alt Diagram](pics/actuator_state_diagram.png)
 
 ### Registration States (Yellow)
@@ -18,7 +15,6 @@ not a strict requirement.
 | Bind     | Binds UDP port to use when listening for master broadcasts.       |
 | Listen   | Listens for master discovery broadcasts (message M).              |
 | Unbind   | Removes UDP port binding.                                         |
-| Wait     | Waits for some suitable time.                                     |
 | Connect  | Connects to discovered master using TCP.                          |
 | Register | Sends registration message to master (message AMR).               |
 
@@ -58,16 +54,11 @@ change and query its state.
     |   |<--SYN/ACK---|   | TCP Handshake.
     |   |-----ACK---->|   |
     |   |             |   |
-    |   |-----AMR---->|   | [AMR] Actuator Master Registration (TCP)
+    |   |-----AMR---->|   | [AMR] Actuator Master Registration (TCP)*
     +-+-+             +-+-+
       |                 |
       |                 |
 ```
-
-| Msg.| Prt.| Port  | Description                                              |
-|:---:|:---:|:-----:|:---------------------------------------------------------|
-|  M  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
-| AMR | TCP | 14001 | Actuator type, allowed actions with parameter names*.    |
 
 \* If a sensor has any facility, room or location data, it will send it to
    master in order to help the master in determining its locality.
@@ -80,21 +71,15 @@ change and query its state.
 +------------+    +------------+
       |                 |
     +-+-+             +-+-+
-    |   |<----ACU-----|   | Actuator Context Update
+    |   |<----ACU-----|   | Actuator Context Update*
     |   |             |   |
     |   |<-----A------|   | Action Statement
     |   |             |   |
-    |   |------AR---->|   | Actuator Report
+    |   |------AR---->|   | Actuator Report**
     +-+-+             +-+-+
       |                 |
       |                 |
 ```
-
-| Msg.| Prt.| Port  | Description                                              |
-|:---:|:---:|:-----:|:---------------------------------------------------------|
-| ACU | TCP | 14001 | Facility and room identifiers, optionally locality data*.|
-|  A  | TCP | 14001 | Target action and action state.                          |
-|  AR | TCP | 14001 | Current action states**.                                 |
 
 \* The message is only sent if necessary, and typically only once.
 
@@ -124,11 +109,23 @@ De-registration occurs by either party terminating the TCP session.
 
 ## Actuator/Master Message Protocol
 
-```
-[M] Master Process Discovery
-Protocol: UDP Broadcast
-Port: 14000
+The below list contains all messages relevant to the actuator.
 
+| Msg.| Prt.| Port  | Description                                              |
+|:---:|:---:|:-----:|:---------------------------------------------------------|
+|  M  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
+| AMR | TCP | 14001 | Actuator type, allowed actions with parameter names*.    |
+| ACU | TCP | 14001 | Facility and room identifiers, optionally locality data*.|
+|  A  | TCP | 14001 | Target action and action state.                          |
+|  AR | TCP | 14001 | Current action states**.                                 |
+
+### Message Schemata
+
+All messages strictly conform to the JSON specification. The root structure is
+always an object.
+
+#### [M] Master Process Discovery
+```
 Schema:
   message: string          # Message type identifier. Is always "M".
 
@@ -136,18 +133,16 @@ Example:
   { "message": "M" }
 ```
 
+#### [AMR] Actuator Master Registration
 ```
-[AMR] Actuator Master Registration
-Protocol: TCP Unicast
-Port: 14001
-
 Schema:
   message: string          # Message type identifier. Is always "AMR".
   type: string             # Type of actuator, eg. "door", "alarm", etc.
-  actions: [               # List of available actions.
+  actions: [               # List of available actuator actions.
     name: string           # Name of action, eg. "open", "trigger", etc.
     parameters: [          # List of action parameters.
-      :string              # Parameter name, eg. "intensity", "speed", etc.
+      name: string         # Name of parameter.
+      type: string         # Type. One of "boolean", "string", or "integer".
     ]
   ]
   locality: object         # Contents of any ACU message previously received.
@@ -159,21 +154,28 @@ Example:
     "actions": [
       {
         "name": "open",
-        "parameters": [ "speed" ]
+        "parameters": [
+          {
+            "name": "speed",
+            "type": "integer"
+          }
+        ]
       },
       {
         "name": "close",
-        "parameters": [ "speed" ]
+        "parameters": [
+          {
+            "name": "speed",
+            "type": "integer"
+          }
+        ]
       }
     ]
   }
 ```
 
+#### [ACU] Actuator Master Registration
 ```
-[ACU] Actuator Master Registration
-Protocol: TCP Unicast
-Port: 14001
-
 Schema:
   message: string          # Message type identifier. Is always "ACU".
   facility: string         # Facility identifier.
@@ -191,11 +193,8 @@ Example:
   }
 ```
 
+#### [A] Action Statement
 ```
-[A] Action Statement
-Protocol: TCP Unicast
-Port: 14001
-
 Schema:
   TODO
 
@@ -203,11 +202,8 @@ Example:
   TODO
 ```
 
+#### [AR] Actuator Report
 ```
-[AR] Actuator Report
-Protocol: TCP Unicast
-Port: 14001
-
 Schema:
   TODO
 
