@@ -20,7 +20,7 @@ govern the behavior of the actuators in response to sensor readings.
 | Section                        | Description                                 |
 |:-------------------------------|:--------------------------------------------|
 | [Use Cases](docs/use_cases.md) | Outlines human system interaction.          |
-| [Actuator](docs/actuator.md)   | Actuator process description.               |
-| [Master](docs/master.md)       | Master process description.                 |
-| [Sensor](docs/sensor.md)       | Sensor process description.                 |
+| [Actuator](docs/actuator.md)   | Actuator specification.                     |
+| [Master](docs/master.md)       | Master specification.                       |
+| [Sensor](docs/sensor.md)       | Sensor specification.                       |
 | [Terminal](docs/terminal.md)   | Terminal application description.           |
