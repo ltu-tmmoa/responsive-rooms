@@ -19,7 +19,7 @@ Do note that the current API does not aim to be feature complete. The
 specification is currently aimed at providing the functionality required to
 create a working system prototype.
 
-Example:
+__Example:__
 
 The below example causes readings from a sensor of type "thermometer" to update
 some monitor with the property "temperature".
@@ -40,7 +40,9 @@ Below are the components part of the interface available when writing rules:
 
 Registers a new rule, which is a reaction to input of some category of sensor.
 
-__register( sensorType, sensorRule )__
+```lua
+register( sensorType, sensorRule )
+```
 - `sensorType` _(string)_
   - Identifies a category of sensors, eg. "thermometer".
 - `sensorRule` _(function (facility, room, sensor))_
@@ -53,13 +55,17 @@ __register( sensorType, sensorRule )__
 An object passed to a sensor rule function representing all sensors and
 actuators managed by the master process executing the rule.
 
-__room = facility.getRoom( identifier )__
+```lua
+room = facility.getRoom( identifier )
+```
 - `room` _Room | nil_
   - The identified room, or nil.
 - `identifier` _string_
   - Room identifier.
 
-__rooms = facility.getRooms()__
+```lua
+rooms = facility.getRooms()
+```
 - `rooms` _Room[]_
   - All facility rooms.
 
@@ -68,11 +74,15 @@ __rooms = facility.getRooms()__
 An object passed to a sensor rule function, representing all sensors and
 actuators in a room.
 
-__actuators = facility.getActuators()__
+```lua
+actuators = facility.getActuators()
+```
 - `actuators` _Actuator[]_
   - All actuators in room.
 
-__actuators = facility.getActuatorsByType( type )__
+```lua
+actuators = facility.getActuatorsByType( type )
+```
 - `actuators` _Actuator[]_
   - All actuators in room having given type.
 - `type` _string_
@@ -82,23 +92,31 @@ __actuators = facility.getActuatorsByType( type )__
 
 Represents an actuator.
 
-__type = actuator.getType()__
+```lua
+type = actuator.getType()
+```
 - `type` _string_
   - Actuator type identifier, eg. "door".
 
-__value = actuator.get( property )__
+```lua
+value = actuator.get( property )
+```
 - `value` _any_
   - The value associated with the actuator property named.
 - `property` _string_
   - Property name.
 
-__actuator.set( property, value )__
+```lua
+actuator.set( property, value )
+```
 - `property` _string_
   - Name of property to set.
 - `value` _any_
   - Property value.
 
-__room = actuator.getRoom()__
+```lua
+room = actuator.getRoom()
+```
 - `room` _Room_
   - The room in which the actuator is located.
 
@@ -106,17 +124,24 @@ __room = actuator.getRoom()__
 
 Represents a sensor.
 
-__type = sensor.getType()__
+```lua
+type = sensor.getType()
+```
 - `type` _string_
   - Sensor type identifier, eg. "proximity_sensor".
 
-__value = sensor.get( property )__
-- `value` _any__
+```lua
+value = sensor.get( property )
+```
+- `value` _any_
+
   - The value associated with the sensor property named.
 - `property` _string_
   - Property name.
 
-__room = sensor.getRoom()__
+```lua
+room = sensor.getRoom()
+```
 - `room` _Room_
   - The room in which the sensor is located.
 
