@@ -21,7 +21,18 @@ create a working system prototype.
 
 Example:
 
-TODO
+The below example causes readings from a sensor of type "thermometer" to update
+some monitor with the property "temperature".
+
+```lua
+register("thermometer", function (facility, room, sensor)
+    local celcius = sensor.get("celcius")
+    for _, actuator in room.getActuatorsByType("monitor")
+    do
+        actuator.set("temperature", celcius)
+    end
+end)
+```
 
 Below are the components part of the interface available when writing rules:
 
@@ -69,11 +80,45 @@ __actuators = facility.getActuatorsByType( type )__
 
 ### The Actuator Object
 
-TODO
+Represents an actuator.
+
+__type = actuator.getType()__
+- `type` _string_
+  - Actuator type identifier, eg. "door".
+
+__value = actuator.get( property )__
+- `value` _any_
+  - The value associated with the actuator property named.
+- `property` _string_
+  - Property name.
+
+__actuator.set( property, value )__
+- `property` _string_
+  - Name of property to set.
+- `value` _any_
+  - Property value.
+
+__room = actuator.getRoom()__
+- `room` _Room_
+  - The room in which the actuator is located.
 
 ### The Sensor Object
 
-TODO
+Represents a sensor.
+
+__type = sensor.getType()__
+- `type` _string_
+  - Sensor type identifier, eg. "proximity_sensor".
+
+__value = sensor.get( property )__
+- `value` _any__
+  - The value associated with the sensor property named.
+- `property` _string_
+  - Property name.
+
+__room = sensor.getRoom()__
+- `room` _Room_
+  - The room in which the sensor is located.
 
 ## Rule Management
 
