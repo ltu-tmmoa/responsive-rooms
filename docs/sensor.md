@@ -6,9 +6,35 @@ to in order to be part of a responsive rooms system.
 
 ## Sensor State Diagram
 
-```
-TODO
-```
+![Diagram](pics/sensor_state_diagram.png)
+
+### Registration States (Yellow)
+
+| State    | Description                                                       |
+|:---------|:------------------------------------------------------------------|
+| Bind     | Binds UDP port to use when listening for master broadcasts.       |
+| Listen   | Listens for master discovery broadcasts (message M).              |
+| Unbind   | Removes UDP port binding.                                         |
+| Connect  | Connects to discovered master using TCP.                          |
+| Register | Sends registration message to master (message SMR).               |
+
+### Runtime States (Blue)
+
+| State    | Description                                                       |
+|:---------|:------------------------------------------------------------------|
+| Schedule | Determines when to receive message and report state.              |
+| Receive  | Attempts to receive (non-blocking) message from master.           |
+| Update   | Updates local context data (using message CU).                    |
+| Report   | Sends curent state to master (message SR).                        |
+
+### Error States (Red)
+
+| State    | Description                                                       |
+|:---------|:------------------------------------------------------------------|
+| Unbind   | Removes UDP port binding.                                         |
+| Wait     | Waits for some suitable time.                                     |
+| Invalid  | Received message that is invalid or of unknown type.              |
+|Report Er.| Sends report to master about received invalid message (message E).|
 
 ## Sensor/Master Communication
 
