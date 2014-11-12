@@ -6,7 +6,7 @@ expected to conform to in order to be part of a responsive rooms system.
 
 ## Actuator States
 
-![Alt Diagram](pics/actuator_state_diagram.png)
+![Diagram](pics/actuator_state_diagram.png)
 
 ### Registration States (Yellow)
 
@@ -25,7 +25,7 @@ expected to conform to in order to be part of a responsive rooms system.
 | Schedule | Determines when to receive message and report state.              |
 | Receive  | Attempts to receive (non-blocking) message from master.           |
 | Action   | Carries out received action (in message A).                       |
-| Update   | Updates local context data (using message ACU).                   |
+| Update   | Updates local context data (using message CU).                    |
 | Report   | Sends curent state to master (message AR).                        |
 
 ### Error States (Red)
@@ -50,13 +50,13 @@ change and query its state.
 +------------+    +------------+
       |                 |
     +-+-+             +-+-+
-    |   |<-----M------|   | [M] Master Process Discovery (Broadcast UDP)
+    |   |<-----M------|   | Master Process Discovery (UDP Broadcast)
     |   |             |   |
     |   |-----SYN---->|   |
     |   |<--SYN/ACK---|   | TCP Handshake.
     |   |-----ACK---->|   |
     |   |             |   |
-    |   |-----AMR---->|   | [AMR] Actuator Master Registration (TCP)*
+    |   |-----AMR---->|   | Actuator Master Registration*
     +-+-+             +-+-+
       |                 |
       |                 |
