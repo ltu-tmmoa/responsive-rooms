@@ -34,7 +34,7 @@ to in order to be part of a responsive rooms system.
 | Unbind   | Removes UDP port binding.                                         |
 | Wait     | Waits for some suitable time.                                     |
 | Invalid  | Received message that is invalid or of unknown type.              |
-|Report Er.| Sends report to master about received invalid message (message E).|
+| Rep. Er. | Reports to master about received message error (message ER).      |
 
 ## Sensor/Master Communication
 
@@ -49,13 +49,13 @@ its state.
 +------------+    +------------+
       |                 |
     +-+-+             +-+-+
-    |   |<-----M------|   | Master Process Discovery (UDP Broadcast)
+    |   |<-----MD-----|   | Master Process Discovery (UDP Broadcast)
     |   |             |   |
     |   |-----SYN---->|   |
     |   |<--SYN/ACK---|   | TCP Handshake
     |   |-----ACK---->|   |
     |   |             |   |
-    |   |-----SMR---->|   | Sensor Master Registration*
+    |   |------SM---->|   | Sensor Master Registration*
     +-+-+             +-+-+
       |                 |
       |                 |
@@ -79,7 +79,7 @@ order. The diagram below is to be considered an example.
     |   |             |   |
     |   |------SR---->|   | Sensor Report**
     |   |             |   |
-    |   |------E----->|   | Error Report
+    |   |------ER---->|   | Error Report
     +-+-+             +-+-+
       |                 |
       |                 |

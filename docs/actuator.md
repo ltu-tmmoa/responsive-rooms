@@ -13,10 +13,10 @@ expected to conform to in order to be part of a responsive rooms system.
 | State    | Description                                                       |
 |:---------|:------------------------------------------------------------------|
 | Bind     | Binds UDP port to use when listening for master broadcasts.       |
-| Listen   | Listens for master discovery broadcasts (message M).              |
+| Listen   | Listens for master discovery broadcasts (message MD).             |
 | Unbind   | Removes UDP port binding.                                         |
 | Connect  | Connects to discovered master using TCP.                          |
-| Register | Sends registration message to master (message AMR).               |
+| Register | Sends registration message to master (message AM).                |
 
 ### Runtime States (Blue)
 
@@ -24,7 +24,7 @@ expected to conform to in order to be part of a responsive rooms system.
 |:---------|:------------------------------------------------------------------|
 | Schedule | Determines when to receive message and report state.              |
 | Receive  | Attempts to receive (non-blocking) message from master.           |
-| Action   | Carries out received action (in message A).                       |
+| Action   | Carries out received action (in message AU).                      |
 | Update   | Updates local context data (using message CU).                    |
 | Report   | Sends curent state to master (message AR).                        |
 
@@ -35,7 +35,7 @@ expected to conform to in order to be part of a responsive rooms system.
 | Unbind   | Removes UDP port binding.                                         |
 | Wait     | Waits for some suitable time.                                     |
 | Invalid  | Received message that is invalid or of unknown type.              |
-|Report Er.| Sends report to master about received invalid message (message E).|
+| Rep. Er. | Reports to master about received message error (message ER).      |
 
 ## Actuator/Master Communication
 
@@ -50,13 +50,13 @@ change and query its state.
 +------------+    +------------+
       |                 |
     +-+-+             +-+-+
-    |   |<-----M------|   | Master Process Discovery (UDP Broadcast)
+    |   |<-----MD-----|   | Master Process Discovery (UDP Broadcast)
     |   |             |   |
     |   |-----SYN---->|   |
     |   |<--SYN/ACK---|   | TCP Handshake.
     |   |-----ACK---->|   |
     |   |             |   |
-    |   |-----AMR---->|   | Actuator Master Registration*
+    |   |------AM---->|   | Actuator Master Registration*
     +-+-+             +-+-+
       |                 |
       |                 |
@@ -78,11 +78,11 @@ order. The diagram below is to be considered an example.
     +-+-+             +-+-+
     |   |<-----CU-----|   | Context Update*
     |   |             |   |
-    |   |<-----SU-----|   | State Update
+    |   |<-----AU-----|   | Actuator State Update
     |   |             |   |
     |   |------AR---->|   | Actuator Report**
     |   |             |   |
-    |   |------E----->|   | Error Report
+    |   |------ER---->|   | Error Report
     +-+-+             +-+-+
       |                 |
       |                 |
@@ -120,33 +120,33 @@ The below list contains all messages relevant to the actuator.
 
 | Msg.| Prt.| Port  | Description                                              |
 |:---:|:---:|:-----:|:---------------------------------------------------------|
-|  M  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
-| AMR | TCP | 14001 | Actuator type, allowed actions with parameter names.     |
-|  CU | TCP | 14001 | Facility and room identifiers.                           |
-|  SU | TCP | 14001 | Target property and state.                               |
-|  AR | TCP | 14001 | Current actuator state.                                  |
-|  E  | TCP | 14001 | Message error report.                                    |
+| MD  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
+| AM  | TCP | 14001 | Actuator type, allowed actions with parameter names.     |
+| CU  | TCP | 14001 | Facility and room identifiers.                           |
+| AU  | TCP | 14001 | Target property and state.                               |
+| AR  | TCP | 14001 | Current actuator state.                                  |
+| E   | TCP | 14001 | Message error report.                                    |
 
 ### Message Schemata
 
 All messages strictly conform to the [JSON](http://www.json.org) specification.
 The root structure is always an object.
 
-#### [M] Master Process Discovery
+#### [MD] Master Process Discovery
 ```
 Schema:
-  { "message": "M" }         # Message type identifier. Is always "M".
+  { "message": "MD" }        # Message type identifier. Is always "MD".
 ```
 ```
 Example:
-  { "message": "M" }
+  { "message": "MD" }
 ```
 
-#### [AMR] Actuator Master Registration
+#### [AM] Actuator Master Registration
 ```
 Schema:
   {
-    "message": "AMR",        # Message type identifier. Is always "AMR".
+    "message": "AM",         # Message type identifier. Is always "AM".
     "type": "<type>",        # Type of actuator, eg. "door", "alarm", etc.
     "properties": {
       "<name>": "<type>",    # Name and property type*.
@@ -162,7 +162,7 @@ Schema:
 ```
 Example:
   {
-    "message": "AMR",
+    "message": "AM",
     "type": "door",
     "properties": {
       "open": "boolean"
@@ -200,11 +200,11 @@ Example:
   }
 ```
 
-#### [SU] State Update
+#### [AU] Actuator State Update
 ```
 Schema:
   {
-    "message": "SU",         # Message type identifier. Is always "SU".
+    "message": "AU",         # Message type identifier. Is always "AU".
     "properties": {
       "<name>": <value>,     # Name and property value of relevant type.
       ...                    # May contain any amount of relevant properties*.
@@ -217,7 +217,7 @@ Schema:
 ```
 Example:
   {
-    "message": "SU",
+    "message": "AU",
     "properties": {
       "open": false
     }
@@ -246,11 +246,11 @@ Example:
   }
 ```
 
-#### [E] Error Report
+#### [ER] Error Report
 ```
 Schema:
   {
-    "message": "E",
+    "message": "ER",         # Message type identifier. Is always "ER".
     "error": "<description>" # A text describing relevant error.
   }
 ```
@@ -258,7 +258,7 @@ Schema:
 ````
 Example:
   {
-    "message": "E",
+    "message": "ER",
     "error": "Unrecognized property 'openp'."
   }
 ```
