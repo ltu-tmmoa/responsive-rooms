@@ -233,6 +233,6 @@ Schema:
 Example:
   {
     "message": "ER",
-    "error": "Unrecognized property 'openp'."
+    "error": "Unrecognized message type 'SRr'."
   }
 ```
