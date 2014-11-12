@@ -113,4 +113,126 @@ De-registration occurs by either party terminating the TCP session.
 
 ## Sensor/Master Message Protocol
 
-TODO
+The below list contains all messages relevant to the sensor.
+
+| Msg.| Prt.| Port  | Description                                              |
+|:---:|:---:|:-----:|:---------------------------------------------------------|
+| MD  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
+| SR  | TCP | 14001 | Sensor type, reported properties with types.             |
+| CU  | TCP | 14001 | Facility and room identifiers.                           |
+| SR  | TCP | 14001 | Current actuator state.                                  |
+| ER  | TCP | 14001 | Message error report.                                    |
+
+### Message Schemata
+
+All messages strictly conform to the [JSON](http://www.json.org) specification.
+The root structure is always an object.
+
+#### [MD] Master Process Discovery
+```
+Schema:
+  { "message": "MD" }        # Message type identifier. Is always "MD".
+```
+```
+Example:
+  { "message": "MD" }
+```
+
+#### [SM] Sensor Master Registration
+```
+Schema:
+  {
+    "message": "SM",         # Message type identifier. Is always "SM".
+    "type": "<type>",        # Type of sensor, eg. "thermometer", "lock", etc.
+    "properties": {
+      "<name>": "<type>",    # Name and property type*.
+      ...                    # May contain any amount of properties.
+    },
+    "context": {<context>}   # Data of CU message previously received, or null.
+  }
+```
+
+\* A property type may be one of "boolean", "integer", "number", "string",
+   "array" or "object".
+
+```
+Example:
+  {
+    "message": "SM",
+    "type": "thermometer",
+    "properties": {
+      "celcius": "number",
+      "fahrenheit": "number"
+    },
+    "context": null
+  }
+```
+
+#### [CU] Context Update
+```
+Schema:
+  {
+    "message": "CU",         # Message type identifier. Is always "CU".
+    "facility": "<name>",    # Facility identifier.
+    "room": "<name>"         # Room identifier.
+    "location": {            # Optional. Absolute coordinates.
+      "x": <x>,
+      "y": <y>,
+      "z": <z>
+    }
+  }
+```
+
+```
+Example:
+  {
+    "message": "CU",
+    "facility": "A",
+    "room": "1202",
+    "location": {
+      "x": 4.5,
+      "y": 1.9,
+      "z": 6.2
+    }
+  }
+```
+
+#### [SR] Sensor Report
+```
+Schema:
+  {
+    "message": "SR",         # Message type identifier. Is always "SR".
+    "properties": {
+      "<name>": <value>,     # Name and property value of relevant type.
+      ...                    # May contain any amount of relevant properties.
+    }
+  }
+```
+
+```
+Example:
+  {
+    "message": "SR",
+    "properties": {
+      "celcius": 81.239,
+      "fahrenheit": 178.23
+    }
+  }
+```
+
+#### [ER] Error Report
+```
+Schema:
+  {
+    "message": "ER",         # Message type identifier. Is always "ER".
+    "error": "<description>" # A text describing relevant error.
+  }
+```
+
+````
+Example:
+  {
+    "message": "ER",
+    "error": "Unrecognized property 'openp'."
+  }
+```
