@@ -34,6 +34,8 @@ expected to conform to in order to be part of a responsive rooms system.
 |:---------|:------------------------------------------------------------------|
 | Unbind   | Removes UDP port binding.                                         |
 | Wait     | Waits for some suitable time.                                     |
+| Invalid  | Received message that is invalid or of unknown type.              |
+|Report Er.| Sends report to master about received invalid message (message E).|
 
 ## Actuator/Master Communication
 
@@ -89,6 +91,10 @@ considered `unresponsive` for another 30 seconds, after which it is forcibly
 de-registered from the master. An `unresponsive` actuator succeeding to send a
 report to its master before being de-registered regains normal status.
 
+### Error
+
+TODO
+
 ### De-registration
 
 De-registration occurs by either party terminating the TCP session.
@@ -118,6 +124,7 @@ The below list contains all messages relevant to the actuator.
 |  CU | TCP | 14001 | Facility and room identifiers.                           |
 |  SU | TCP | 14001 | Target property and state.                               |
 |  AR | TCP | 14001 | Current actuator state.                                  |
+|  E  | TCP | 14001 | Message error report.                                    |
 
 ### Message Schemata
 
@@ -237,3 +244,7 @@ Example:
   }
 }
 ```
+
+#### [E] Error Report
+
+TODO
