@@ -164,12 +164,12 @@ a resource available using the below entry points.
 
 Acquires names all programs owned by master.
 
-Request:
+__Request:__
 
-    GET /programs
+    HEAD /programs
     Accept: application/lua
 
-Response:
+__Response:__
 
     HTTP/1.1 200 OK
     Content-Type: application/lua
@@ -177,11 +177,11 @@ Response:
 
 `<names>` is a comma separated list of program names.
 
-### POST /programs
+#### POST /programs
 
 Adds a new program to master.
 
-Request:
+__Request:__
 
     POST /programs
     Accept: text/plain
@@ -193,7 +193,7 @@ Request:
 `<name>` is the name of the program being added. `<program>` is the program
 source code.
 
-Response:
+__Response:__
 
     HTTP/1.1 201 CREATED
     Content-Type: text/plain
@@ -204,16 +204,17 @@ Response:
 `<location>` is the URL at which the new program now is available. `<name>`is
 the name of the added program.
 
-Response if program name is missing in header:
+__Response if program name is missing in header:__
 
     HTTP/1.1 400 BAD REQUEST
     Content-Type: text/plain
 
     No program name given in message header.
 
-Response if a program with given name already exists:
+__Response if a program with given name already exists:__
 
     HTTP/1.1 403 FORBIDDEN
     Content-Type: text/plain
 
     A program with that name already exists.
+
