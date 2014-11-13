@@ -156,10 +156,6 @@ but rather to allow for the construction of a working prototype.
 
 ### The Program Collection
 
-A program is a lua source file which may be sent to, and implicitly executed
-by, a master process. Each master process exposes its collection of programs as
-a resource available using the below entry points.
-
 #### HEAD /programs
 
 Acquires names all programs owned by master.
@@ -218,3 +214,36 @@ __Response if a program with given name already exists:__
 
     A program with that name already exists.
 
+### The Program Resource
+
+#### GET /programs/<name>
+
+Acquires program with given name, eg. `thermometer_alarm.lua`.
+
+__Request:__
+
+    GET /programs/<name>
+    Accept: application/lua
+
+`<name>`is the name of the requested program.
+
+__Response:__
+
+    HTTP/1.1 200 OK
+    Content-Type: application/lua
+    Collection-Item: <name>
+
+    <program>
+
+`<name>` is the name of the requested program. `<program>` is the program
+source code.
+
+__Response if program does not exist:__
+
+    HTTP/1.1 404 NOT FOUND
+
+#### DELETE /programs/<name>
+
+Removes identified program from master.
+
+TODO
