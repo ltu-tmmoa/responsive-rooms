@@ -151,37 +151,69 @@ A master allows management of its rules, each rule being part of a program, by
 exposing them as a [REST](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htmweb)ful
 service.
 
+The API provided by the specification is currently not aimed at completeness,
+but rather to allow for the construction of a working prototype.
+
 ### The Program Collection
 
 A program is a lua source file which may be sent to, and implicitly executed
 by, a master process. Each master process exposes its collection of programs as
 a resource available using the below entry points.
 
-```
-GET /programs
+#### HEAD /programs
 
-Query parameters:
-  TODO
-Headers:
-  Accept: application/json
-```
-Acquires all programs owned by master.
+Acquires names all programs owned by master.
 
-```
-HEAD /programs
-```
-Acquires only the HTTP header received when performing `GET /programs`.
+Request:
 
-```
-POST /programs
-```
-Adds a new given program to collection.
+    GET /programs
+    Accept: application/lua
 
-```
-PUT /programs
-```
+Response:
 
+    HTTP/1.1 200 OK
+    Content-Type: application/lua
+    Collection-Items: <names>
 
-```
-DELETE /programs
-```
+`<names>` is a comma separated list of program names.
+
+### POST /programs
+
+Adds a new program to master.
+
+Request:
+
+    POST /programs
+    Accept: text/plain
+    Content-Type: application/lua
+    Collection-Item: <name>
+
+    <program>
+
+`<name>` is the name of the program being added. `<program>` is the program
+source code.
+
+Response:
+
+    HTTP/1.1 201 CREATED
+    Content-Type: text/plain
+    Location: <location>
+
+    <name>
+
+`<location>` is the URL at which the new program now is available. `<name>`is
+the name of the added program.
+
+Response if program name is missing in header:
+
+    HTTP/1.1 400 BAD REQUEST
+    Content-Type: text/plain
+
+    No program name given in message header.
+
+Response if a program with given name already exists:
+
+    HTTP/1.1 403 FORBIDDEN
+    Content-Type: text/plain
+
+    A program with that name already exists.
