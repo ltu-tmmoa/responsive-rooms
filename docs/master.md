@@ -147,4 +147,41 @@ room = sensor.getRoom()
 
 ## Rule Management
 
-TODO
+A master allows management of its rules, each rule being part of a program, by
+exposing them as a [REST](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htmweb)ful
+service.
+
+### The Program Collection
+
+A program is a lua source file which may be sent to, and implicitly executed
+by, a master process. Each master process exposes its collection of programs as
+a resource available using the below entry points.
+
+```
+GET /programs
+
+Query parameters:
+  TODO
+Headers:
+  Accept: application/json
+```
+Acquires all programs owned by master.
+
+```
+HEAD /programs
+```
+Acquires only the HTTP header received when performing `GET /programs`.
+
+```
+POST /programs
+```
+Adds a new given program to collection.
+
+```
+PUT /programs
+```
+
+
+```
+DELETE /programs
+```
