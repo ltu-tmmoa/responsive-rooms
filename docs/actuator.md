@@ -125,7 +125,7 @@ The below list contains all messages relevant to the actuator.
 | CU  | TCP | 14001 | Facility and room identifiers.                           |
 | AU  | TCP | 14001 | Target property and state.                               |
 | AR  | TCP | 14001 | Current actuator state.                                  |
-| E   | TCP | 14001 | Message error report.                                    |
+| ER  | TCP | 14001 | Message error report.                                    |
 
 ### Message Schemata
 
