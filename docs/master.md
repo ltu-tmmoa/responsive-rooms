@@ -246,4 +246,23 @@ __Response if program does not exist:__
 
 Removes identified program from master.
 
-TODO
+__Request:__
+
+    DELETE /programs/<name>
+
+`<name>`is the name of the program  to be deleted.
+
+__Response:__
+
+    HTTP/1.1 204 NO CONTENT
+    Collection-Item: <name>
+
+`<name>` is the name of the deleted program.
+
+__Response if attempting to delete non-existing program:__
+
+    HTTP/1.1 204 NO CONTENT
+    Collection-Item: <name>
+
+`<name>` is the name of the program requested to be deleted, even if it didn't
+exist.
