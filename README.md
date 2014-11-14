@@ -20,7 +20,7 @@ govern the behavior of the actuators in response to sensor readings.
 | Section                        | Description                                 |
 |:-------------------------------|:--------------------------------------------|
 | [Use Cases](docs/use_cases.md) | Outlines human system interaction.          |
-| [Actuator](docs/actuator.md)   | Actuator specification.                     |
-| [Master](docs/master.md)       | Master specification.                       |
-| [Sensor](docs/sensor.md)       | Sensor specification.                       |
-| [Terminal](docs/terminal.md)   | Terminal application description.           |
+| [Sensor](docs/sensor.md)       | Senses its environment.                     |
+| [Actuator](docs/actuator.md)   | Interacts with its environment.             |
+| [Master](docs/master.md)       | Governs actuators using sensors and rules.  |
+| [Terminal](docs/terminal.md)   | Allows a human to organize a system.        |
