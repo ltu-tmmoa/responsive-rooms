@@ -24,3 +24,12 @@ govern the behavior of the actuators in response to sensor readings.
 | [Actuator](docs/actuator.md)   | Interacts with its environment.             |
 | [Master](docs/master.md)       | Governs actuators using sensors and rules.  |
 | [Terminal](docs/terminal.md)   | Allows a human to organize a system.        |
+
+## Building and Running
+
+Building an running automatically is most conveniently done using GNU Make. Type
+the following command to get a list of available ones.
+
+```sh
+$ make help
+```
