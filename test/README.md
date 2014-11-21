@@ -10,5 +10,5 @@ all integration tests and viewing their results.
 $ make
 ```
 
-The above command invokes all integration test available in this folder.
+The above command invokes all integration tests available in this folder.
 
