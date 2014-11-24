@@ -1,0 +1,9 @@
+{
+  "name": "master-terminal",
+  "description": "Mocks a master process as seen by a terminal.",
+  "main": "main.js",
+  "dependencies": {
+    "restify": "^2.8.3"
+  },
+  "devDependencies": {}
+}
