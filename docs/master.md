@@ -149,7 +149,7 @@ room = sensor.getRoom()
 
 A master allows management of its rules, each rule being part of a program, by
 exposing them as a [REST](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htmweb)ful
-service.
+service on __port 14003__.
 
 The API provided by the specification is currently not aimed at completeness,
 but rather to allow for the construction of a working prototype.
