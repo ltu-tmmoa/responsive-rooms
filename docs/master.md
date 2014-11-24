@@ -154,6 +154,64 @@ service on __port 14003__.
 The API provided by the specification is currently not aimed at completeness,
 but rather to allow for the construction of a working prototype.
 
+### The Sensor Collection
+
+#### GET /sensors
+
+Acquires data about all resources, or a filtered subset of them.
+
+__Request:__
+
+    GET /sensors<query>
+    Accept: application/json
+
+`<query>` is optionally any of the query parameters `unassigned`, which may have
+the values `true` or `false`, and `room`, which ought to identify some room.
+
+__Response:__
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+    Collection-Items: <names>
+
+    <body>
+
+`<names>` is a comma separated list of all sensor identifiers.
+
+`<body>` is the JSON payload containing information about all sensors.
+
+### The Sensor Resource
+
+#### PUT /sensors/:id/room
+
+Assigns identified sensor to some given room.
+
+__Request:__
+
+    PUT /sensors/<id>/room
+    Content-Type: text/plain
+
+    <room>
+
+`<id>` is a sensor identifier.
+
+`<room>` is the room in which to put the sensor. If `<room>` is empty, the
+sensor is removed from its current room.
+
+__Response:__
+
+    HTTP/1.1 204 NO CONTENT
+
+### The Actuator Collection
+
+This corresponds exactly to the Sensor Collection, but with the difference that
+the word `sensor` is substituted for `actuator` in all cases.
+
+### The Actuator Resource
+
+This corresponds to the Sensor Resource, but with the difference that the word
+`sensor` is substituted for `actuator` in all cases.
+
 ### The Program Collection
 
 #### HEAD /programs
