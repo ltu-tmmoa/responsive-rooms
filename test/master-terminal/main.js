@@ -4,10 +4,10 @@ var restify = require("restify");
 var server = restify.createServer();
 
 // These are the programs kept track of by the mock-up master service. They are
-// not persistent as that would go agains the purpose of the mock-up.
+// not persistent as that would go against the purpose of having a mock-up.
 var programs = {
     "temp_alarm.lua": "--[[Some lua code.]]--",
-    "temp_monitor.lua": "--[[Some other lua code.]]--",
+    "temp_monitor.lua": "--[[Some more lua code.]]--",
 };
 
 server.head("/programs", function (req, res, next) {
