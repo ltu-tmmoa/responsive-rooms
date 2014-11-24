@@ -216,7 +216,7 @@ __Response if a program with given name already exists:__
 
 ### The Program Resource
 
-#### GET /programs/<name>
+#### GET /programs/:name
 
 Acquires program with given name, eg. `thermometer_alarm.lua`.
 
@@ -242,7 +242,7 @@ __Response if program does not exist:__
 
     HTTP/1.1 404 NOT FOUND
 
-#### DELETE /programs/<name>
+#### DELETE /programs/:name
 
 Removes identified program from master.
 
