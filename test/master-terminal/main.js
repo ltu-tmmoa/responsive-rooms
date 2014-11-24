@@ -1,48 +1,11 @@
 var restify = require("restify");
+var db = require("./database.js");
 
 // Creates a new Restify server.
 var server = restify.createServer();
 
 // This adds query information to 'req' variable in resource handles.
 server.use(restify.queryParser());
-
-// These are the sensors, actuators, and programs kept track of by the mock-up
-// master service. They are not persistent as that would go against the purpose
-// of having a mock-up.
-var sensors = [
-    {
-        id: "0", room: "A1", type: "thermometer",
-        properties: {
-            celcius: "number",
-            fahrenheit: "number",
-        },
-    },
-    {
-        id: "1", room: null, type: "thermometer",
-        properties: {
-            celcius: "number",
-            fahrenheit: "number",
-        },
-    }
-];
-var actuators = [
-    {
-        id: "A", room: "A1", type: "alarm",
-        properties: {
-            fired: "boolean",
-        },
-    },
-    {
-        id: "B", room: null, type: "alarm",
-        properties: {
-            fired: "boolean",
-        },
-    },
-];
-var programs = {
-    "temp_alarm.lua": "--[[Some lua code.]]--",
-    "temp_monitor.lua": "--[[Some more lua code.]]--",
-};
 
 server.get("/sensors", function (req, res, next) {
     if (req.headers["accept"] !== "application/json") {
@@ -53,17 +16,17 @@ server.get("/sensors", function (req, res, next) {
 
     if (req.query.room) {
         if (req.query.room === "null") {
-            sensorResult = sensors.filter(function (s) {
+            sensorResult = db.sensors.filter(function (s) {
                 return !s.room;
             });
 
         } else {
-            sensorResult = sensors.filter(function (s) {
+            sensorResult = db.sensors.filter(function (s) {
                 return s.room === req.query.room;
             });
         }
     } else {
-        sensorResult = sensors;
+        sensorResult = db.sensors;
     }
     var sensorNames = sensorResult.map(function (s) {
         return s.id;
@@ -89,7 +52,7 @@ server.put("/sensors/:id/room", function (req, res, next) {
     }
 
     var target = null;
-    sensors.forEach(function (s) {
+    db.sensors.forEach(function (s) {
         if (s.id === id) {
             target = s;
         }
@@ -118,7 +81,7 @@ server.head("/programs", function (req, res, next) {
     res.writeHead(200, {
         "Content-Type": "application/lua",
         "Content-Length": 0,
-        "Collection-Items": Object.keys(programs).join(","),
+        "Collection-Items": Object.keys(db.programs).join(","),
     });
     res.end();
 
@@ -142,7 +105,7 @@ server.post("/programs", function (req, res, next) {
         res.write("No program name given in message header.");
         res.end();
 
-    } else if (programs[name]) {
+    } else if (db.programs[name]) {
         res.writeHead(403, {
             "Content-Type": "text/plain",
         });
@@ -151,7 +114,7 @@ server.post("/programs", function (req, res, next) {
 
     } else {
         req.on("data", function (data) {
-            programs[name] = data.toString();
+            db.programs[name] = data.toString();
             res.writeHead(200, {
                 "Content-Type": "text/plain",
                 "Location": "/programs/" + name,
@@ -170,13 +133,13 @@ server.get("/programs/:name", function (req, res, next) {
         reportError("'GET /programs/" + name + "' requires 'Content-Type: application/lua'.");
     }
 
-    if (programs[name]) {
+    if (db.programs[name]) {
         res.writeHead(200, {
             "Content-Type": "application/lua",
-            "Content-Length": programs[name].length,
+            "Content-Length": db.programs[name].length,
             "Collection-Item": name,
         });
-        res.write(programs[name]);
+        res.write(db.programs[name]);
         res.end();
 
     } else {
@@ -188,7 +151,7 @@ server.get("/programs/:name", function (req, res, next) {
 server.del("/programs/:name", function (req, res, next) {
     var name = req.params.name;
 
-    delete programs[name];
+    delete db.programs[name];
     res.writeHead(204, {
         "Collection-Item": name,
     });
