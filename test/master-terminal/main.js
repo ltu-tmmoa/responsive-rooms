@@ -3,12 +3,113 @@ var restify = require("restify");
 // Creates a new Restify server.
 var server = restify.createServer();
 
-// These are the programs kept track of by the mock-up master service. They are
-// not persistent as that would go against the purpose of having a mock-up.
+// This adds query information to 'req' variable in resource handles.
+server.use(restify.queryParser());
+
+// These are the sensors, actuators, and programs kept track of by the mock-up
+// master service. They are not persistent as that would go against the purpose
+// of having a mock-up.
+var sensors = [
+    {
+        id: "0", room: "A1", type: "thermometer",
+        properties: {
+            celcius: "number",
+            fahrenheit: "number",
+        },
+    },
+    {
+        id: "1", room: null, type: "thermometer",
+        properties: {
+            celcius: "number",
+            fahrenheit: "number",
+        },
+    }
+];
+var actuators = [
+    {
+        id: "A", room: "A1", type: "alarm",
+        properties: {
+            fired: "boolean",
+        },
+    },
+    {
+        id: "B", room: null, type: "alarm",
+        properties: {
+            fired: "boolean",
+        },
+    },
+];
 var programs = {
     "temp_alarm.lua": "--[[Some lua code.]]--",
     "temp_monitor.lua": "--[[Some more lua code.]]--",
 };
+
+server.get("/sensors", function (req, res, next) {
+    if (req.headers["accept"] !== "application/json") {
+        reportError("'GET /sensors' requires 'Accept: application/json'.");
+    }
+
+    var sensorResult = [];
+
+    if (req.query.room) {
+        if (req.query.room === "null") {
+            sensorResult = sensors.filter(function (s) {
+                return !s.room;
+            });
+
+        } else {
+            sensorResult = sensors.filter(function (s) {
+                return s.room === req.query.room;
+            });
+        }
+    } else {
+        sensorResult = sensors;
+    }
+    var sensorNames = sensorResult.map(function (s) {
+        return s.id;
+    });
+
+    var sensorBuffer = new Buffer(JSON.stringify(sensorResult));
+    res.writeHead(200, {
+        "Content-Type": "application/json",
+        "Content-Length": sensorBuffer.length,
+        "Collection-items": sensorNames.join(","),
+    });
+    res.write(sensorBuffer);
+    res.end();
+
+    next();
+});
+
+server.put("/sensors/:id/room", function (req, res, next) {
+    var id = req.params.id;
+
+    if (req.headers["content-type"] !== "text/plain") {
+        reportError("'PUT /sensors/" + id + "/room' requires 'Content-Type: text/plain'.");
+    }
+
+    var target = null;
+    sensors.forEach(function (s) {
+        if (s.id === id) {
+            target = s;
+        }
+    });
+
+    if (target === null) {
+        res.writeHead(404);
+        res.end();
+
+    } else {
+        target.room = null;
+        req.on("data", function (data) {
+            target.room = data.toString();
+            res.writeHead(204);
+            res.end();
+        });
+    }
+
+    next();
+});
 
 server.head("/programs", function (req, res, next) {
     if (req.headers["accept"] !== "application/lua") {
@@ -108,5 +209,5 @@ function reportError(message) {
 // with status 0 if no errors were reported.
 setTimeout(function () {
     process.exit(errors);
-}, 500);
+}, 50000);
 
