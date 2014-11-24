@@ -165,8 +165,8 @@ __Request:__
     GET /sensors<query>
     Accept: application/json
 
-`<query>` is optionally any of the query parameters `unassigned`, which may have
-the values `true` or `false`, and `room`, which ought to identify some room.
+`<query>` is optionally the a query parameter on the form `?room=<room>`, where
+`<room>` is a room identifier or `null`.
 
 __Response:__
 
