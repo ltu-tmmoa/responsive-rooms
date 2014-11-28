@@ -1,5 +1,7 @@
 start-test:
-	@echo "Not implemented"
+	python terminal-master.py &
+	sleep 1
+	python initiator.py
 
 start-tested-process:
 	@echo "Not implemented"
