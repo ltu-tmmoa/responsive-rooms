@@ -1,1 +1,4 @@
-No need to write any Makefile here.
+# Sensor-Master Mock-Up Service
+
+Requires Python 2.
+
