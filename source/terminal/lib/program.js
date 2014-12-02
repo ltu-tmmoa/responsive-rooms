@@ -22,6 +22,7 @@
               headers: {
                 "accept": "text/plain",
                 "content-type": "application/lua",
+                "content-length": data.length,
                 "collection-item": programPath,
               },
               port: 14003,
