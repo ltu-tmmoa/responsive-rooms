@@ -85,14 +85,18 @@
       var action = that.actions[args[0]];
       var parameters = that.handlerDefaultArgs.concat(args.slice(1));
 
-      if (typeof action === "object") {
-        action.onAction.apply(action, parameters);
+      try {
+        if (typeof action === "object") {
+          action.onAction.apply(action, parameters);
 
-      } else if (typeof action === "function") {
-        action.apply(null, parameters);
+        } else if (typeof action === "function") {
+          action.apply(null, parameters);
 
-      } else {
-        console.log("Unsupported action '%s'.", args[0]);
+        } else {
+          console.log("Unsupported action '%s'.", args[0]);
+        }
+      } catch (e) {
+        console.log(e);
       }
       that.rl.prompt();
     });
