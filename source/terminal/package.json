@@ -1,0 +1,5 @@
+{
+  "name": "terminal",
+  "description": "Terminal application for communicating with a Responsive Rooms master process.",
+  "main": "bin/responsive-rooms"
+}

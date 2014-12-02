@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+var Terminal = require("../lib/Terminal.js");
+var sensor = require("../lib/sensor.js");
+var actuator = require("../lib/actuator.js");
+var program = require("../lib/program.js");
+
+function main(argv) {
+  "use strict";
+
+  if (argv.length !== 3) {
+    console.error("Usage: ./responsive-rooms <host>");
+  }
+  var host = argv[2];
+  var terminal = new Terminal(host);
+
+  terminal
+    .register("sensor", sensor)
+    .register("actuator", actuator)
+    .register("program", program)
+    .register("quit", function () {
+      terminal.close();
+    })
+    .onClose(function () {
+      console.log("Bye!");
+      process.exit(0);
+    })
+    .exec();
+}
+
+main(process.argv);
+
