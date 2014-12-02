@@ -121,11 +121,11 @@ The below list contains all messages relevant to the actuator.
 | Msg.| Prt.| Port  | Description                                              |
 |:---:|:---:|:-----:|:---------------------------------------------------------|
 | MD  | UDP | 14000 | _Broadcast._ Master node identifier.                     |
-| AM  | TCP | 14001 | Actuator type, allowed actions with parameter names.     |
-| CU  | TCP | 14001 | Facility and room identifiers.                           |
-| AU  | TCP | 14001 | Target property and state.                               |
-| AR  | TCP | 14001 | Current actuator state.                                  |
-| ER  | TCP | 14001 | Message error report.                                    |
+| AM  | TCP | 14002 | Actuator type, allowed actions with parameter names.     |
+| CU  | TCP | 14002 | Facility and room identifiers.                           |
+| AU  | TCP | 14002 | Target property and state.                               |
+| AR  | TCP | 14002 | Current actuator state.                                  |
+| ER  | TCP | 14002 | Message error report.                                    |
 
 ### Message Schemata
 
