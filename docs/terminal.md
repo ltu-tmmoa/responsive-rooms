@@ -11,4 +11,4 @@ a master process using HTTP/REST.
 A terminal has to be able to participate in the human interactions outlined in
 the [use cases](use_cases.md). Also, it has to be able to interace with the web
 service provided by the [master processes](master.md) in order to be able to
-fullfill the requirements of the use cases.
+fullfill the requirements of those use cases.

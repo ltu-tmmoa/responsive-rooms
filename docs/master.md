@@ -202,6 +202,10 @@ __Response:__
 
     HTTP/1.1 204 NO CONTENT
 
+__Response if the identified sensor doesn't exist:__
+
+    HTTP/1.1 404 NOT FOUND
+
 ### The Actuator Collection
 
 This corresponds exactly to the Sensor Collection, but with the difference that
