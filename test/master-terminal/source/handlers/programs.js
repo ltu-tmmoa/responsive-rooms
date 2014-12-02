@@ -1,11 +1,11 @@
 var db = require("../database.js");
 
 module.exports = {
-    register: function (server, reportError) {
+    register: function (server) {
 
         server.head("/programs", function (req, res, next) {
             if (req.headers["accept"] !== "application/lua") {
-                reportError("'HEAD /programs' requires 'Accept: application/lua'.");
+                console.log("'HEAD /programs' requires 'Accept: application/lua'.");
             }
             res.writeHead(200, {
                 "Content-Type": "application/lua",
@@ -19,10 +19,10 @@ module.exports = {
         
         server.post("/programs", function (req, res, next) {
             if (req.headers["accept"] !== "text/plain") {
-                reportError("'POST /programs' requires 'Accept: text/plain'.");
+                console.log("'POST /programs' requires 'Accept: text/plain'.");
             }
             if (req.headers["content-type"] !== "application/lua") {
-                reportError("'POST /programs' requires 'Content-Type: application/lua'.");
+                console.log("'POST /programs' requires 'Content-Type: application/lua'.");
             }
         
             var name = req.headers["collection-item"];
@@ -59,7 +59,7 @@ module.exports = {
             var name = req.params.name;
         
             if (req.headers["accept"] !== "application/lua") {
-                reportError("'GET /programs/" + name + "' requires 'Content-Type: application/lua'.");
+                console.log("'GET /programs/" + name + "' requires 'Content-Type: application/lua'.");
             }
         
             if (db.programs[name]) {

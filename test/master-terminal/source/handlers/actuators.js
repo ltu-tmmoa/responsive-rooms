@@ -1,11 +1,11 @@
 var db = require("../database.js");
 
 module.exports = {
-    register: function (server, reportError) {
+    register: function (server) {
 
         server.get("/actuators", function (req, res, next) {
             if (req.headers["accept"] !== "application/json") {
-                reportError("'GET /actuators' requires 'Accept: application/json'.");
+                console.log("'GET /actuators' requires 'Accept: application/json'.");
             }
         
             var actuatorResult = [];
@@ -44,10 +44,10 @@ module.exports = {
             var id = req.params.id;
         
             if (req.headers["content-type"] !== "text/plain") {
-                reportError("'PUT /actuators/" + id + "/room' requires 'Content-Type: text/plain'.");
+                console.log("'PUT /actuators/" + id + "/room' requires 'Content-Type: text/plain'.");
             }
             if (typeof req.headers["content-length"] === "undefined") {
-                reportError("'PUT /actuators/" + id + "/room' requires 'Content-Length'.");
+                console.log("'PUT /actuators/" + id + "/room' requires 'Content-Length'.");
             }
         
             var target = null;
