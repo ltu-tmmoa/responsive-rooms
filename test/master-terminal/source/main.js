@@ -24,9 +24,4 @@ function reportError(message) {
     errors += 1;
 }
 
-// The mock-up serivce lives for 500 ms before it dies. The service only exits
-// with status 0 if no errors were reported.
-setTimeout(function () {
-    process.exit(errors);
-}, 500);
 

@@ -27,9 +27,6 @@ govern the behavior of the actuators in response to sensor readings.
 
 ## Building and Running
 
-Building an running automatically is most conveniently done using GNU Make. Type
-the following command to get a list of available ones.
+As the project is implemented as several services, instructions for building and
+running may be found in the folders of each of the [project services](source/).
 
-```sh
-$ make help
-```
