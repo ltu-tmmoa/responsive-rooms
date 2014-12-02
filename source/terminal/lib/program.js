@@ -29,10 +29,7 @@
           port: 14003,
         }, function (res) {
           if (res.statusCode === 200) {
-            res.headers["collection-items"].split(",").forEach(function (item) {
-              console.log("  " + item);
-            });
-            fulfill();
+            fulfill(res.headers["collection-items"].split(",").join("\r\n"));
 
           } else {
             reject("Failed to retrieve program list from host '" + host + "'.");
@@ -47,7 +44,22 @@
      */
     remove: function (host, programName) {
       return new Promise(function (fulfill, reject) {
-        fulfill();
+        if (!programName) {
+          reject("Please state the name of a program to remove.");
+          return;
+        }
+        http.request({
+          host: host,
+          path: "/programs/" + programName,
+          method: "DELETE",
+          port: 14003,
+        }, function (res) {
+          if (res.statusCode === 204) {
+            fulfill("Removed '" + res.headers["collection-item"] + "'.");
+          }
+          reject("Failed to remove program '" + programName + "'.");
+        })
+        .on("error", reject).end();
       });
     },
   };
