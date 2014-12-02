@@ -10,6 +10,7 @@ function main(argv) {
 
   if (argv.length !== 3) {
     console.error("Usage: ./responsive-rooms <host>");
+    process.exit(1);
   }
   var host = argv[2];
   var terminal = new Terminal(host);
