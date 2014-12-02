@@ -190,10 +190,13 @@ __Request:__
 
     PUT /sensors/<id>/room
     Content-Type: text/plain
+    Content-Length: <length>
 
     <room>
 
 `<id>` is a sensor identifier.
+
+`<length>` is the size of `<room>` in bytes.
 
 `<room>` is the room in which to put the sensor. If `<room>` is empty, the
 sensor is removed from its current room.
