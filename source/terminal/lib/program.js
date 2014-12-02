@@ -1,6 +1,7 @@
 (function () {
   "use strict";
 
+  var fs = require("fs");
   var http = require("http");
   var Promise = require("promise");
 
@@ -8,9 +9,35 @@
     /**
      * Adds named program to master at host.
      */
-    add: function (host, programName) {
+    add: function (host, programPath) {
       return new Promise(function (fulfill, reject) {
-        fulfill();
+        fs.readFile(programPath, function (error, data) {
+          if (error) {
+            reject("Failed to read file '" + programPath + "'.");
+          } else {
+            http.request({
+              host: host,
+              path: "/programs",
+              method: "POST",
+              headers: {
+                "accept": "text/plain",
+                "content-type": "application/lua",
+                "collection-item": programPath,
+              },
+              port: 14003,
+            }, function (res) {
+              res.on("data", function (data) {
+                if (res.statusCode === 201) {
+                  fulfill("Added program '" + data.toString() + "'.");
+                } else {
+                  reject(data.toString());
+                }
+              });
+            })
+            .on("error", reject)
+            .end(data);
+          }
+        });
       });
     },
 
@@ -35,7 +62,8 @@
             reject("Failed to retrieve program list from host '" + host + "'.");
           }
         })
-        .on("error", reject).end();
+        .on("error", reject)
+        .end();
       });
     },
 
@@ -59,7 +87,36 @@
           }
           reject("Failed to remove program '" + programName + "'.");
         })
-        .on("error", reject).end();
+        .on("error", reject)
+        .end();
+      });
+    },
+
+    view: function (host, programName) {
+      return new Promise(function (fulfill, reject) {
+        if (!programName) {
+          reject("Please state the name of a program to view.");
+          return;
+        }
+        http.request({
+          host: host,
+          path: "/programs/" + programName,
+          method: "GET",
+          port: 14003,
+        }, function (res) {
+          if (res.statusCode === 200) {
+            res.on("data", function (data) {
+              fulfill(data.toString());
+            });
+          } else if (res.statusCode === 404) {
+            reject("Program '" + programName + "' not found.");
+
+          } else {
+            reject("Failed to view program '" + programName + "'.");
+          }
+        })
+        .on("error", reject)
+        .end();
       });
     },
   };
