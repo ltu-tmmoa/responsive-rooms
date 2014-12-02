@@ -5,6 +5,17 @@
   var http = require("http");
   var Promise = require("promise");
 
+  /**
+   * Handles some terminal action.
+   */
+  exports.onAction = function (host, action, param) {
+    var f = actions[action];
+    if (f) {
+      return f(host, param);
+    } 
+    throw new Error("No such program action.");
+  };
+
   var actions = {
     /**
      * Adds named program to master at host.
@@ -126,14 +137,6 @@
         .end();
       });
     },
-  };
-
-  exports.onAction = function (host, action, param) {
-    var f = actions[action];
-    if (f) {
-      return f(host, param);
-    } 
-    throw new Error("No such program action.");
   };
 
   exports.getSubActions = function () {

@@ -4,11 +4,22 @@
   var Promise = require("promise");
   var http = require("http");
 
+  /**
+   * Handles some terminal action.
+   */
+  exports.onAction = function (host, action, param1, param2) {
+    var f = actions[action];
+    if (f) {
+      return f(host, param1, param2);
+    }
+    throw new Error("No such sensor action.");
+  };
+
   var actions = {
     /**
      * Lists sensors, potentially filtering by status.
      */
-    list: function (host, pathRoot, filter) {
+    list: function (host, filter) {
       return new Promise(function (fulfill, reject) {
         var query = "";
         if (filter) {
@@ -20,7 +31,7 @@
         }
         http.request({
           host: host,
-          path: pathRoot + query,
+          path: "/sensors" + query,
           method: "GET",
           headers: {
             "accept": "application/json",
@@ -44,25 +55,25 @@
     /**
      * Assigns sensor with given ID a room.
      */
-    assign: function (host, pathRoot, id, room) {
+    assign: function (host, id, room) {
       return new Promise(function (fulfill, reject) {
         if (!id) {
           reject("Please provide a sensor ID.");
           return;
         }
         if (!room) {
-          reject("Please provide a room to assign to.");
+          reject("Please provide a room to assign sensor to.");
           return;
         }
-        assign(host, pathRoot, id, room)
+        assign(host, id)
           .then(function (text) {
             if (!text) {
-              text = "Assigned '" + id + "' to room '" + room + "'.";
+              text = "Assigned sensor '" + id + "' to room '" + room + "'.";
             }
             fulfill(text);
           }, function (error) {
             if (!error) {
-              error = "Failed to assign '" + id + "' to room '" + room + "'.";
+              error = "Failed to assign sensor '" + id + "' to room '" + room + "'.";
             }
             reject(error);
           });
@@ -72,21 +83,21 @@
     /**
      * Unassigns identified sensor from given room.
      */
-    unassign: function (host, pathRoot, id) {
+    unassign: function (host, id) {
       return new Promise(function (fulfill, reject) {
         if (!id) {
           reject("Please provide a sensor ID.");
           return;
         }
-        assign(host, pathRoot, id, room)
+        assign(host, id, room)
           .then(function (text) {
             if (!text) {
-              text = "Unassigned '" + id + "'.";
+              text = "Unassigned sensor '" + id + "'.";
             }
             fulfill(text);
           }, function (error) {
             if (!error) {
-              error = "Failed to unassign '" + id + "'.";
+              error = "Failed to unassign sensor '" + id + "'.";
             }
             reject(error);
           });
@@ -94,14 +105,14 @@
     },
   };
 
-  function assign(host, pathRoot, id, room) {
+  function assign(host, id, room) {
     return new Promise(function (fulfill, reject) {
       if (typeof room !== "string") {
         room = "";
       }
       http.request({
         host: host,
-        path: pathRoot + "/" + id + "/room",
+        path: "/sensors/" + id + "/room",
         method: "PUT",
         headers: {
           "content-type": "text/plain",
@@ -124,14 +135,9 @@
     });
   }
 
-  exports.onAction = function (host, action, param1, param2) {
-    var f = actions[action];
-    if (f) {
-      return f(host, "/sensors", param1, param2);
-    }
-    throw new Error("No such sensor action.");
-  };
-
+  /**
+   * Provides a list of subactions for the command completer.
+   */
   exports.getSubActions = function () {
     return [
       "list",
