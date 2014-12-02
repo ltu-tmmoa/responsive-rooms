@@ -46,6 +46,9 @@ module.exports = {
             if (req.headers["content-type"] !== "text/plain") {
                 reportError("'PUT /sensors/" + id + "/room' requires 'Content-Type: text/plain'.");
             }
+            if (typeof req.headers["content-length"] === "undefined") {
+                reportError("'PUT /sensors/" + id + "/room' requires 'Content-Length'.");
+            }
         
             var target = null;
             db.sensors.forEach(function (s) {
@@ -60,11 +63,17 @@ module.exports = {
         
             } else {
                 target.room = null;
-                req.on("data", function (data) {
-                    target.room = data.toString();
+                if ((req.headers["content-length"] | 0) > 0) {
+                    req.on("data", function (data) {
+                        target.room = data.toString();
+                        res.writeHead(204);
+                        res.end();
+                    });  
+                } else {
+                    target.room = null;
                     res.writeHead(204);
                     res.end();
-                });
+                }
             }
         
             next();
