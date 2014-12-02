@@ -3,6 +3,7 @@
   "description": "Terminal application for communicating with a Responsive Rooms master process.",
   "main": "bin/responsive-rooms",
   "dependencies": {
+    "colors": "^1.0.3",
     "promise": "^6.0.1"
   }
 }

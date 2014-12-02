@@ -2,6 +2,7 @@
   "use strict";
 
   var readline = require("readline");
+  var colors = require("colors/safe");
 
   /**
    * Creates a new terminal handler.
@@ -95,9 +96,14 @@
           promise = action.apply(null, parameters);
 
         } else {
-          throw new Error("Unsupported action '%s'.", args[0]);
+          throw new Error("Unsupported action '" + args[0] + "'.");
         }
-        promise.then(resume, resume);
+        promise.then(resume, function (error) {
+          if (!(error instanceof Error)) {
+            error = new Error(error);
+          }
+          resume(error);
+        });
 
       } catch (error) {
         resume(error);
@@ -106,6 +112,9 @@
 
     function resume(message) {
       if (message) {
+        if (message instanceof Error) {
+          message = colors.red("! " + message.message);
+        }
         console.log(message);
       }
       that.rl.prompt();
