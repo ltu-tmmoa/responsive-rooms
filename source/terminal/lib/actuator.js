@@ -1,8 +1,12 @@
 (function () {
   "use strict";
 
+  var Promise = require("promise");
+
   exports.onAction = function (host, action, param1, param2) {
-    console.log(arguments);
+    return new Promise(function (fulfill, reject) {
+      fulfill();
+    });
   };
 
   exports.getSubActions = function () {

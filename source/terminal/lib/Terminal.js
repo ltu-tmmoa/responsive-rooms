@@ -76,30 +76,41 @@
    * Starts execution of terminal.
    */
   Terminal.prototype.exec = function (callback) {
-    this.rl.resume(); 
-    this.rl.prompt();
-
     var that = this;
+
+    resume();
+
     this.rl.on("line", function (line) {
       var args = line.split(" ");
       var action = that.actions[args[0]];
       var parameters = that.handlerDefaultArgs.concat(args.slice(1));
 
+      that.rl.pause();
       try {
+        var promise;
         if (typeof action === "object") {
-          action.onAction.apply(action, parameters);
+          promise = action.onAction.apply(action, parameters);
 
         } else if (typeof action === "function") {
-          action.apply(null, parameters);
+          promise = action.apply(null, parameters);
 
         } else {
-          console.log("Unsupported action '%s'.", args[0]);
+          throw new Error("Unsupported action '%s'.", args[0]);
         }
-      } catch (e) {
-        console.log(e);
+        promise.then(resume, resume);
+
+      } catch (error) {
+        resume(error);
+      }
+    });
+
+    function resume(message) {
+      if (message) {
+        console.log(message);
       }
       that.rl.prompt();
-    });
+      that.rl.resume();
+    }
   };
 
   /**

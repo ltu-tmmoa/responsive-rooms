@@ -1,5 +1,8 @@
 {
   "name": "terminal",
   "description": "Terminal application for communicating with a Responsive Rooms master process.",
-  "main": "bin/responsive-rooms"
+  "main": "bin/responsive-rooms",
+  "dependencies": {
+    "promise": "^6.0.1"
+  }
 }
