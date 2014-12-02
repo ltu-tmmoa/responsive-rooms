@@ -44,7 +44,7 @@ module.exports = {
             } else {
                 req.on("data", function (data) {
                     db.programs[name] = data.toString();
-                    res.writeHead(200, {
+                    res.writeHead(201, {
                         "Content-Type": "text/plain",
                         "Location": "/programs/" + name,
                         "Content-Length": name.length,
