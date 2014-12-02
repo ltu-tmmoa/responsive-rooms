@@ -92,6 +92,9 @@
       });
     },
 
+    /**
+     * Views code contents of named program.
+     */
     view: function (host, programName) {
       return new Promise(function (fulfill, reject) {
         if (!programName) {
@@ -102,6 +105,9 @@
           host: host,
           path: "/programs/" + programName,
           method: "GET",
+          headers: {
+            "accept": "application/lua",
+          },
           port: 14003,
         }, function (res) {
           if (res.statusCode === 200) {
