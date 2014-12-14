@@ -101,7 +101,7 @@ function handelSocket(socket) {
         switch (msg.message) {
           case "AM":
             console.log("Got an AM message");
-            console.log("Got an AM message \n" + JSON.stringify(msg, null, 2));
+            console.log(JSON.stringify(msg, null, 2));
             break;
           case "AR":
             console.log("Got an AR message");
