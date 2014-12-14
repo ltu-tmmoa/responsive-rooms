@@ -29,22 +29,30 @@ module.exports = {
     setting to create a transition effect (like change
     brightness over 10 seconds)
     */
-    var transition = lightstatus.properties.transition;
-    var alert = lightstatus.properties.alert; //bolean
-    var brightness = lightstatus.properties.brightness;
-    var red = lightstatus.properties.color.red;
-    var green = lightstatus.properties.color.green;
-    var blue = lightstatus.properties.color.blue;
+    var transition = parseInt(lightstatus.properties.transition);
+    var alert = lightstatus.properties.alert;
+    var brightness = parseInt(lightstatus.properties.brightness);
+    var red = parseInt(lightstatus.properties.color.red);
+    var green = parseInt(lightstatus.properties.color.green);
+    var blue = parseInt(lightstatus.properties.color.blue);
     if (alert == "true") {
       alert = "isLong";
     } else {
-      alert = "";
+      alert = null;
     }
-    var state = hue.lightState.create()
-      .rgb(red, green, blue)
-      .transition(transition)
-      .alert(alert)
-      .brightness(brightness);
+    var state;
+    if (brightness === 0) {
+      state = hue.lightState.create()
+        .off();
+    } else {
+      state = hue.lightState.create()
+        .on()
+        .rgb(red, green, blue)
+        .transition(transition)
+        .alert(alert)
+        .brightness(brightness);
+    }
+
 
     api.setLightState(3, state)
       .then(function() {
@@ -54,7 +62,8 @@ module.exports = {
       .done();
   }
 };
-/*
+/* xy to rgb but it's not working well
+
 function lambstate(statusXy) {
 var x = statusXy.state.xy[0];
 var y = statusXy.state.xy[1];
