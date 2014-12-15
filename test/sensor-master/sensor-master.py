@@ -42,7 +42,7 @@ def SR(properties = {}):
 
 def ER(description = ''):
 	er = {'message': 'ER'}
-	er['description'] = description
+	er['error'] = description
 	return json.dumps(er)
 
 def handle_error(test, message, got, expected = None):

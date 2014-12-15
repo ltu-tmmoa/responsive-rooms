@@ -1,0 +1,58 @@
+{
+    "database_actuators": [
+        {
+            "id": "A", 
+            "properties": {
+                "fired": "boolean"
+            }, 
+            "room": "A1", 
+            "type": "alarm"
+        }, 
+        {
+            "id": "B", 
+            "properties": {
+                "fired": "boolean"
+            }, 
+            "room": null, 
+            "type": "alarm"
+        }, 
+        {
+            "id": "C", 
+            "properties": {}, 
+            "room": "A3", 
+            "type": null
+        }
+    ], 
+    "database_programs": {
+        "hello_world": "print(\"Hello World\")"
+    }, 
+    "database_sensors": [
+        {
+            "id": "0", 
+            "properties": {
+                "celsius": "number", 
+                "fahrenheit": "number"
+            }, 
+            "room": "A1", 
+            "type": "thermometer"
+        }, 
+        {
+            "id": "1", 
+            "properties": {
+                "celsius": "number", 
+                "fahrenheit": "number"
+            }, 
+            "room": null, 
+            "type": "thermometer"
+        }, 
+        {
+            "id": "2", 
+            "properties": {
+                "atm": "number", 
+                "pascal": "number"
+            }, 
+            "room": "A2", 
+            "type": "pressure"
+        }
+    ]
+}

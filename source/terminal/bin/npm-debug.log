@@ -1,0 +1,90 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'colors/safe' ]
+2 info using npm@2.1.11
+3 info using node@v0.10.33
+4 warn package.json terminal@ No repository field.
+5 silly cache add args [ 'colors/safe', null ]
+6 verbose cache add spec colors/safe
+7 silly cache add parsed spec { raw: 'colors/safe',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: 'colors/safe',
+7 silly cache add   spec: 'colors/safe',
+7 silly cache add   type: 'github' }
+8 info maybeGithub Attempting colors/safe from git://github.com/colors/safe
+9 verbose addRemoteGit u="git://github.com/colors/safe" silent=true
+10 silly addRemoteGit parsed { protocol: 'git:',
+10 silly addRemoteGit   slashes: true,
+10 silly addRemoteGit   auth: null,
+10 silly addRemoteGit   host: 'github.com',
+10 silly addRemoteGit   port: null,
+10 silly addRemoteGit   hostname: 'github.com',
+10 silly addRemoteGit   hash: null,
+10 silly addRemoteGit   search: '',
+10 silly addRemoteGit   query: {},
+10 silly addRemoteGit   pathname: '/colors/safe',
+10 silly addRemoteGit   path: '/colors/safe',
+10 silly addRemoteGit   href: 'git://github.com/colors/safe' }
+11 verbose addRemoteGit git://github.com/colors/safe not in flight; cloning
+12 verbose addRemoteGit [ 'git://github.com/colors/safe', 'master' ]
+13 info git [ 'clone',
+13 info git   '--template=/home/sceleris/.npm/_git-remotes/_templates',
+13 info git   '--mirror',
+13 info git   'git://github.com/colors/safe',
+13 info git   '/home/sceleris/.npm/_git-remotes/git-github-com-colors-safe-97801fbd' ]
+14 verbose git clone git://github.com/colors/safe Klonar till ett naket arkiv "/home/sceleris/.npm/_git-remotes/git-github-com-colors-safe-97801fbd"...
+14 verbose git clone git://github.com/colors/safe fatal: remote error:
+14 verbose git clone git://github.com/colors/safe   Repository not found.
+15 info maybeGithub Attempting colors/safe from git+ssh://git@github.com:colors/safe
+16 verbose addRemoteGit u="git+ssh://git@github.com:colors/safe" silent=false
+17 silly addRemoteGit parsed { protocol: 'git+ssh:',
+17 silly addRemoteGit   slashes: true,
+17 silly addRemoteGit   auth: 'git',
+17 silly addRemoteGit   host: 'github.com',
+17 silly addRemoteGit   port: null,
+17 silly addRemoteGit   hostname: 'github.com',
+17 silly addRemoteGit   hash: null,
+17 silly addRemoteGit   search: '',
+17 silly addRemoteGit   query: {},
+17 silly addRemoteGit   pathname: '/:colors/safe',
+17 silly addRemoteGit   path: '/:colors/safe',
+17 silly addRemoteGit   href: 'git+ssh://git@github.com/:colors/safe' }
+18 verbose addRemoteGit git@github.com:colors/safe not in flight; cloning
+19 verbose addRemoteGit [ 'git@github.com:colors/safe', 'master' ]
+20 info git [ 'clone',
+20 info git   '--template=/home/sceleris/.npm/_git-remotes/_templates',
+20 info git   '--mirror',
+20 info git   'git@github.com:colors/safe',
+20 info git   '/home/sceleris/.npm/_git-remotes/git-github-com-colors-safe-d8443620' ]
+21 error git clone git@github.com:colors/safe Klonar till ett naket arkiv "/home/sceleris/.npm/_git-remotes/git-github-com-colors-safe-d8443620"...
+21 error git clone git@github.com:colors/safe Permission denied (publickey).
+21 error git clone git@github.com:colors/safe fatal: Could not read from remote repository.
+21 error git clone git@github.com:colors/safe
+21 error git clone git@github.com:colors/safe Please make sure you have the correct access rights
+21 error git clone git@github.com:colors/safe and the repository exists.
+22 verbose stack Error: Command failed: Klonar till ett naket arkiv "/home/sceleris/.npm/_git-remotes/git-github-com-colors-safe-d8443620"...
+22 verbose stack Permission denied (publickey).
+22 verbose stack fatal: Could not read from remote repository.
+22 verbose stack
+22 verbose stack Please make sure you have the correct access rights
+22 verbose stack and the repository exists.
+22 verbose stack
+22 verbose stack     at ChildProcess.exithandler (child_process.js:648:15)
+22 verbose stack     at ChildProcess.emit (events.js:98:17)
+22 verbose stack     at maybeClose (child_process.js:756:16)
+22 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:823:5)
+23 verbose cwd /usr/home/sceleris/Development/responsive-rooms/source/terminal/bin
+24 error FreeBSD 10.0-RELEASE-p13
+25 error argv "node" "/usr/local/bin/npm" "install" "colors/safe"
+26 error node v0.10.33
+27 error npm  v2.1.11
+28 error code 128
+29 error Command failed: Klonar till ett naket arkiv "/home/sceleris/.npm/_git-remotes/git-github-com-colors-safe-d8443620"...
+29 error Permission denied (publickey).
+29 error fatal: Could not read from remote repository.
+29 error
+29 error Please make sure you have the correct access rights
+29 error and the repository exists.
+30 error If you need help, you may report this error at:
+30 error     <http://github.com/npm/npm/issues>
+31 verbose exit [ 1, true ]

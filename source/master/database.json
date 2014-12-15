@@ -1,0 +1,8 @@
+{
+    "database_actuators": [], 
+    "database_programs": {
+        "bigger_than_80.lua": "-- test --\n-- line2 --\n-- line3 --\n\n-- line5 --\n", 
+        "test.lua": "-- test --\n-- line2 --\n-- line3 --\n\n-- line5 --\n"
+    }, 
+    "database_sensors": []
+}

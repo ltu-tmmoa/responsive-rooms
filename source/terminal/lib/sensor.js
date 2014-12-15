@@ -65,7 +65,7 @@
           reject("Please provide a room to assign sensor to.");
           return;
         }
-        assign(host, id)
+        assign(host, id, room)
           .then(function (text) {
             if (!text) {
               text = "Assigned sensor '" + id + "' to room '" + room + "'.";
@@ -89,7 +89,7 @@
           reject("Please provide a sensor ID.");
           return;
         }
-        assign(host, id, room)
+        assign(host, id)
           .then(function (text) {
             if (!text) {
               text = "Unassigned sensor '" + id + "'.";
