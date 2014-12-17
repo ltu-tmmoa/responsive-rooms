@@ -1,0 +1,135 @@
+
+
+#include <SPI.h>         // needed for Arduino versions later than 0018
+#include <Ethernet.h>
+#include <EthernetUdp.h>         
+
+#define trigPin 6
+#define echoPin 7
+EthernetUDP udp;
+char packetBuffer[UDP_TX_PACKET_MAX_SIZE];
+IPAddress remoteip(130,240,159,79);
+float distance = 102.4;
+EthernetClient client;
+unsigned int localPort=14000;
+byte master = remoteip;
+byte server[]={74,125,232,128};
+
+
+void setup() { 
+ byte mac[] = {0x90, 0xA2, 0xDA, 0x0F, 0x97, 0x98 };
+ Serial.begin(9600);
+ Serial.println("waiting for an IP");
+ while(Ethernet.begin(mac)==0){delay(1000);}
+ Serial.println("obtained an IP Address:");
+ Serial.println(Ethernet.localIP());
+ Serial.println();
+ udp.begin(localPort);
+ 
+ pinMode(trigPin, OUTPUT);
+ pinMode(echoPin, INPUT);
+ 
+}
+
+
+
+boolean isConnected = false;
+
+void loop() {
+  if (!isConnected) {
+    rr_init();
+  } else {
+    rr_run();
+  }
+  rr_wait();
+}
+
+void rr_init(){
+  if (rr_bind()) {
+    if (rr_listen()) {
+      rr_unbind();
+      if (rr_connect()) {
+        if (rr_register()) {
+          isConnected = true;
+          return;
+        }
+      }
+    } else {
+      rr_unbind();
+    }
+  }
+}
+
+boolean rr_bind() { 
+   Serial.println("bind ");
+    int packetSize =udp.parsePacket();
+}
+
+boolean rr_listen() {
+    if(udp.available())
+    {Serial.println("listening on port:");
+     Serial.println(udp.remotePort());
+     udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
+    Serial.println("Contents:");
+    Serial.println(packetBuffer);
+    Serial.println(udp.remoteIP());
+
+    }
+ return true;
+}
+
+void rr_unbind() {
+   udp.stop();
+   Serial.println("unbind");
+}
+
+boolean rr_connect() {
+  if (client.connect(server,remoteip)){
+   Serial.println("TCP connection");}
+ else {
+    Serial.println("connection failed");
+  }
+}
+
+boolean rr_register() {
+   
+  if (client.available()) {
+    client.print("{\"message\":\"SRM\",\"properties\":{\"Name\":");
+    client.println("Distance sensor");
+    Serial.println("registered");
+}}
+
+void rr_run() {
+  if (!rr_receive()) {
+    isConnected = false;
+    return;
+  }
+  if (!rr_report()) {
+    isConnected = false;
+  }
+}
+
+boolean rr_receive() {
+ if (client.available()) {
+    char cu = client.read();
+    Serial.print(cu);
+  }
+  return true;
+}
+
+boolean rr_report() {
+   int duration, distance;
+   digitalWrite(trigPin, HIGH);
+   delayMicroseconds(1000);
+   digitalWrite(trigPin, LOW);
+   duration = pulseIn(echoPin, HIGH) / 2;
+   distance = duration / 29.1;
+   client.print("{\"message\":\"SR\",\"properties\":{\"distance\":");//Sending a sensor Report Message
+   client.print(distance);
+   client.println(" cm");
+   delay(29000);
+   return true;
+}
+void rr_wait() {
+  delay(1000);
+}
