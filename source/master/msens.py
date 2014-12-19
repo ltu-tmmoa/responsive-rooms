@@ -69,11 +69,11 @@ class SensorListener(SocketServer.BaseRequestHandler):
 						if message['message'] == 'SM':
 							self.last_contact = time.time()
 							registered_sensors.append(Sensor(message, self))
-							print "Added a sensor!", registered_sensors[-1]._sensor
+							print "Added a sensor!"#, registered_sensors[-1]._sensor
 						elif message['message'] == 'SR':
 							mlua.add_report(message)
 						elif message['message'] == 'ER':
-							print "Sensor reported an error!", message['error']
+							print "Sensor reported an error!"#, message['error']
 						print
 						print
 						print

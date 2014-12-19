@@ -74,7 +74,7 @@ class ActuatorListener(SocketServer.BaseRequestHandler):
 						message = json.loads(message)
 						if message['message'] == 'AM':
 							registered_actuators.append(Actuator(message, self))
-							print "Added an actuator!", registered_actuators[-1]._actuator
+							print "Added an actuator!"#, registered_actuators[-1]._actuator
 						else:
 							print "Another message than AM..."
 						print
@@ -87,7 +87,7 @@ class ActuatorListener(SocketServer.BaseRequestHandler):
 					for i in range(len(send_queue)-1):
 						if send_queue[i]['target'] == self:
 							to_send = AU(send_queue.pop(i)['properties'])
-							print "sending", to_send
+							print "Sending to actuator..."#, to_send
 							self.request.sendall(to_send)
 			time.sleep(0.1)
 

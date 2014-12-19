@@ -49,7 +49,9 @@ def ER(description = ''):
 	return json.dumps(er)
 
 def generate_report():
-	return SR({'number': random.randrange(0, 100)})
+	number = random.randrange(0, 100)
+	print "Sending number:", number
+	return SR({'number': number})
 
 def do_run():
 	while True:
@@ -77,7 +79,7 @@ def do_run():
 				time.sleep(0.1)
 		connection.close()
 		print "Discovered!"
-		print "In communication..."
+		print "Connected..."
 		time.sleep(2.5)
 		connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		connection.connect((source[0], tcp_port))

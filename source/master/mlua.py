@@ -1,8 +1,8 @@
 import time
 import mdb
 import mact
-from lupa import LuaRuntime
-lua = LuaRuntime(unpack_returned_tuples=True)
+#from lupa import LuaRuntime
+#lua = LuaRuntime(unpack_returned_tuples=True)
 
 sensor_reports = []
 
@@ -32,9 +32,9 @@ class Room:
 
 def register(sensorType, sensorRule):
 	all_sensors_of_type = []
-	print all_sensors
+	#print all_sensors
 	for sensor in all_sensors:
-		print sensor._sensorobject
+		#print sensor._sensorobject
 		if sensor.getType() == sensorType:
 			all_sensors_of_type += [Sensor(sensor)]
 	sensorRule(Facility(), Room(), Sensor())
@@ -46,15 +46,15 @@ def run_programs():
 	global sensor_reports
 	while True:
 		for report in sensor_reports:
-			print report
+			#print report
 			value = int(report['properties']['number'])
 			sensor_reports = sensor_reports[1:]
 			if 'bigger_than_80.lua' in mdb.get_program_names() and value > 80 and len(mact.registered_actuators) > 0:
-				print '...'
+				#print '...'
 				mact.registered_actuators[0].set('text', str(value))
 				mact.registered_actuators[0].set('unread', True)
 			if 'smaller_than_10.lua' in mdb.get_program_names() and value < 80 and len(mact.registered_actuators) > 0:
-				print '!!!'
+				#print '!!!'
 				mact.registered_actuators[0].set('text', str(value))
 				mact.registered_actuators[0].set('unread', True)
 		time.sleep(0.1)

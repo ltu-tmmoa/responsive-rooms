@@ -60,14 +60,15 @@ def ER(description = ''):
 def generate_action(tts):
 	mp3file = '/tmp/mastermp3.{}'
 	url = "http://translate.google.com/translate_tts?ie=UTF-8&tl=en&q={}"
-	text = "I was told to read this out loud: {}.".format(str(tts))
+	text = str(tts)
 	mp3 = requests.get(url.format(text), stream=True)
 	with open(mp3file.format('mp3'), 'wb') as fd:
 		for chunk in mp3.iter_content(1024):
 			fd.write(chunk)
-	mixer.init()
-	mixer.music.load(mp3file.format('mp3'))
-	mixer.music.play()
+	call(["mplayer", mp3file.format('mp3')])
+	#mixer.init()
+	#mixer.music.load(mp3file.format('mp3'))
+	#mixer.music.play()
 
 locked = False
 my_self = {'text': '', 'unread': False}
@@ -96,7 +97,7 @@ def do_run():
 				time.sleep(0.1)
 		connection.close()
 		print "Discovered!"
-		print "In communication..."
+		print "Communicating..."
 		time.sleep(2.5)
 		connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		connection.connect((source[0], tcp_port))
@@ -112,7 +113,7 @@ def do_run():
 					try:
 						message = json.loads(message)
 						if message['message'] == 'AU':
-							print "Got update..."
+							#print "Got update..."
 							global locked
 							#while locked:
 							#	print "Update locked!"
@@ -123,7 +124,7 @@ def do_run():
 								my_self['text'] = message['properties']['text']
 							if 'unread' in message['properties']:
 								my_self['unread'] = message['properties']['unread']
-							print "Updated:", my_self
+							#print "Updated:", my_self
 							locked = False
 					except ValueError:
 						pass
@@ -136,7 +137,7 @@ def action_checker():
 	global locked
 	global my_self
 	while True:
-		print "Checking action..."
+		#print "Checking action..."
 		#while locked:
 		#	print "Action locked!"
 		#	time.sleep(0.1)

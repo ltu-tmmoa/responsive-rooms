@@ -15,16 +15,16 @@ filter_out = mdb.filter_out
 
 class Sensors(Resource):
 	def get(self):
-		sensors = database_sensors
+		sensors = mdb.get_s()
 		if request.args.get('room'):
 			value = request.args.get('room')
 			if value == "null":
 				value = None
-			sensors = filter_out(database_sensors, 'room', value)
+			sensors = filter_out(mdb.get_s(), 'room', value)
 		sensor_names = ','.join([sensor['id'] for sensor in sensors])
 		return app.make_response((json.dumps(sensors), 200, {'Content-Type': 'application/json', 'Collection-Items': sensor_names}))
 	def put(self, sensor_id):
-		for sensor in database_sensors:
+		for sensor in mdb.get_s():
 			if sensor['id'] == sensor_id:
 				if request.data and request.data != "null":
 					sensor['room'] = request.data
@@ -35,7 +35,7 @@ class Sensors(Resource):
 
 class Actuators(Resource):
 	def get(self):
-		actuators = database_actuators
+		actuators = mdb.get_a()
 		if request.args.get('room'):
 			value = request.args.get('room')
 			if value == "null":
@@ -55,22 +55,22 @@ class Actuators(Resource):
 
 class Programs(Resource):
 	def head(self):
-		program_names = ','.join([program for program in database_programs])
+		program_names = ','.join([program for program in mdb.get_p()])
 		return app.make_response(("", 200, {'Content-Type': 'application/lua', 'Collection-Items': program_names}))
 	def post(self):
-		print request.headers
+		#print request.headers
 		if not 'Collection-Item' in request.headers:
 			return app.make_response(("No program name given in message header.", 400, {'Content-Type': 'text/plain'}))
 		program_name = request.headers['Collection-Item']
-		if program_name in database_programs:
+		if program_name in mdb.get_p():
 			return app.make_response(("A program with that name already exists.", 403, {'Content-Type': 'text/plain'}))
-		database_programs[program_name] = request.data
+		mdb.get_p()[program_name] = request.data
 		return app.make_response((program_name, 201, {'Content-Type': 'text/plain',
 				'Location': 'http://{}:{}/programs/{}'.format(HOST, TERMINALPORT, program_name)}))
 	def get(self, program_name):
-		if not program_name in database_programs:
+		if not program_name in mdb.get_p():
 			return app.make_response(("", 404, {}))
-		return app.make_response((database_programs[program_name], 200, {'Content-Type': 'application/lua', 'Collection-Item': program_name}))
+		return app.make_response((mdb.get_p()[program_name], 200, {'Content-Type': 'application/lua', 'Collection-Item': program_name}))
 	def delete(self, program_name):
 		if program_name in database_programs:
 			database_programs.pop(program_name)

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env nodejs
 
 var Terminal = require("../lib/Terminal.js");
 var sensor = require("../lib/sensor.js");

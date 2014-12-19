@@ -12,6 +12,7 @@ def load_database(filename):
 		with io.open(filename, 'r', encoding='utf-8') as infile:
 			indata = json.load(infile)
 			if indata['database_sensors']:
+				print "importing sensors"
 				database_sensors = indata['database_sensors']
 			if indata['database_actuators']:
 				database_actuators = indata['database_actuators']
@@ -41,3 +42,10 @@ def filter_out(list_of_dicts, key, value, inner = None):
 
 def get_program_names():
 	return database_programs.keys()
+
+def get_s():
+	return database_sensors
+def get_a():
+	return database_actuators
+def get_p():
+	return database_programs
