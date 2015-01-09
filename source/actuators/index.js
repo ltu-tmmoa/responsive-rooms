@@ -198,8 +198,3 @@ function validJSON(msg) {
 function displayError(error) {
   console.log(error);
 }
-
-// Catch all errors
-//process.on('uncaughtException', function(err) {
-//  console.log('Caught exception: ' + err);
-//});
