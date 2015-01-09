@@ -116,7 +116,6 @@ boolean rr_receive() {
   }
   return true;
 }
-
 boolean rr_report() {
    int duration, distance;
    digitalWrite(trigPin, HIGH);
@@ -124,9 +123,9 @@ boolean rr_report() {
    digitalWrite(trigPin, LOW);
    duration = pulseIn(echoPin, HIGH) / 2;
    distance = duration / 29.1;
-   client.print("{\"message\":\"SR\",\"properties\":{\"distance\":");//Sending a sensor Report Message
+   client.print("{\"message\":\"SR\",\"properties\":{\"centimeters\":");//Sending a sensor Report Message
    client.print(distance);
-   client.println(" cm");
+   client.println("}}");
    delay(29000);
    return true;
 }
