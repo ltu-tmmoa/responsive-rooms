@@ -129,10 +129,19 @@ function runTime(socket) {
               break;
             case "AU":
               console.log("received AU");
+              console.log(msg);
+              msg.properties.color = msg.properties.color || {};
+              msg.properties.color.red = msg.properties.color.red || AR.properties.color.red;
+              msg.properties.color.blue = msg.properties.color.blue || AR.properties.color.blue;
+              msg.properties.color.green = msg.properties.color.green || AR.properties.color.green;
+              msg.properties.transition = msg.properties.transition || AR.properties.transition;
+              msg.properties.alert = msg.properties.alert || AR.properties.alert;
+              msg.properties.brightness = msg.properties.brightness || AR.properties.brightness;
               AR = msg;
               AR.message = "AR";
               AR.context = CU;
               hue.changeLightStatus(msg);
+              AR.properties.alert = "false";
               break;
             default:
               socket.write(JSON.stringify(ER));
@@ -191,6 +200,7 @@ function validJSON(msg) {
     return true;
   } catch (error) {
     console.log("Non JSON message");
+    console.log(msg.toString());
     return false;
   }
 }
